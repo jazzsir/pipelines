@@ -32,4 +32,5 @@ def pipeline():
 
 
 if __name__ == '__main__':
-    kfp.compiler.Compiler().compile(pipeline, __file__ + '.yaml')
+    kfp.Client().create_run_from_pipeline_func(pipeline_func=pipeline,
+                                               arguments=arguments, namespace='user')

@@ -15,7 +15,8 @@
 import kfp_server_api
 import unittest
 from pprint import pprint
-from .confusion_matrix import confusion_matrix_pipeline, confusion_visualization
+#from .confusion_matrix import confusion_matrix_pipeline, confusion_visualization
+from . import confusion_matrix
 from ...test.util import KfpMlmdClient, run_pipeline_func, TestCase
 
 import kfp
@@ -29,28 +30,28 @@ def verify(run: kfp_server_api.ApiRun, mlmd_connection_config, **kwargs):
     tasks = client.get_tasks(run_id=run.id)
     pprint(tasks)
 
-    confusion_visualization = tasks['confusion-visualization']
+    confusion_matrix.confusion_visualization = tasks['confusion-visualization']
     output = [
-        a for a in confusion_visualization.outputs.artifacts
+        a for a in confusion_matrix.confusion_visualization.outputs.artifacts
         if a.name == 'mlpipeline_ui_metadata'
     ][0]
     pprint(output)
 
     t.assertEqual(
-        confusion_visualization.get_dict()['outputs']['artifacts'][0]['name'],
+        confusion_matrix.confusion_visualization.get_dict()['outputs']['artifacts'][0]['name'],
         'mlpipeline_ui_metadata'
     )
 
 
 run_pipeline_func([
     TestCase(
-        pipeline_func=confusion_matrix_pipeline,
+        pipeline_func=confusion_matrix.confusion_matrix_pipeline,
         verify_func=verify,
         mode=kfp.dsl.PipelineExecutionMode.V2_COMPATIBLE,
         arguments={}
     ),
     TestCase(
-        pipeline_func=confusion_matrix_pipeline,
+        pipeline_func=confusion_matrix.confusion_matrix_pipeline,
         mode=kfp.dsl.PipelineExecutionMode.V1_LEGACY
     )
 ])
