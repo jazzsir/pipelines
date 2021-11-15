@@ -127,9 +127,9 @@ def _run_test(callback):
         output_directory: Optional[str] = None,  # example
         host: Optional[str] = None,
         external_host: Optional[str] = None,
-        launcher_image: Optional[str] = None,
-        launcher_v2_image: Optional[str] = None,
-        driver_image: Optional[str] = None,
+#        launcher_image: Optional[str] = None,
+#        launcher_v2_image: Optional[str] = None,
+#        driver_image: Optional[str] = None,
         experiment: str = 'v2_sample_test_samples',
         metadata_service_host: Optional[str] = None,
         metadata_service_port: int = 8080,
@@ -168,16 +168,16 @@ def _run_test(callback):
         if metadata_service_host is None:
             metadata_service_host = os.getenv('METADATA_GRPC_SERVICE_HOST',
                                               'metadata-grpc-service')
-        if launcher_image is None:
-            launcher_image = os.getenv('KFP_LAUNCHER_IMAGE')
-        if launcher_v2_image is None:
-            launcher_v2_image = os.getenv('KFP_LAUNCHER_V2_IMAGE')
-            if not launcher_v2_image:
-                raise Exception("launcher_v2_image is empty")
-        if driver_image is None:
-            driver_image = os.getenv('KFP_DRIVER_IMAGE')
-            if not driver_image:
-                raise Exception("driver_image is empty")
+#        if launcher_image is None:
+#            launcher_image = os.getenv('KFP_LAUNCHER_IMAGE')
+#        if launcher_v2_image is None:
+#            launcher_v2_image = os.getenv('KFP_LAUNCHER_V2_IMAGE')
+#            if not launcher_v2_image:
+#                raise Exception("launcher_v2_image is empty")
+#        if driver_image is None:
+#            driver_image = os.getenv('KFP_DRIVER_IMAGE')
+#            if not driver_image:
+#                raise Exception("driver_image is empty")
 
         client = kfp.Client(host=host)
 
@@ -201,8 +201,8 @@ def _run_test(callback):
                     return run_v2_pipeline(
                         client=client,
                         fn=pipeline_func,
-                        driver_image=driver_image,
-                        launcher_v2_image=launcher_v2_image,
+#                        driver_image=driver_image,
+#                        launcher_v2_image=launcher_v2_image,
                         pipeline_root=output_directory,
                         enable_caching=enable_caching,
                         arguments={
@@ -228,7 +228,7 @@ def _run_test(callback):
                             **extra_arguments,
                             **arguments,
                         },
-                        launcher_image=launcher_image,
+#                        launcher_image=launcher_image,
                         experiment_name=experiment,
                         # This parameter only works for v2 compatible mode and v2 mode, it does not affect v1 mode
                         enable_caching=enable_caching,
@@ -274,8 +274,8 @@ def _run_test(callback):
 def run_v2_pipeline(
     client: kfp.Client,
     fn: Callable,
-    driver_image: str,
-    launcher_v2_image: str,
+#    driver_image: str,
+#    launcher_v2_image: str,
     pipeline_root: str,
     enable_caching: bool,
     arguments: Mapping[str, str],
@@ -311,10 +311,10 @@ def run_v2_pipeline(
             'kfp-v2-compiler',
             '--spec',
             pipeline_job,
-            '--driver',
-            driver_image,
-            '--launcher',
-            launcher_v2_image,
+#            '--driver',
+#            driver_image,
+#            '--launcher',
+#            launcher_v2_image,
             '--pipeline_root',
             pipeline_root,
         ]
