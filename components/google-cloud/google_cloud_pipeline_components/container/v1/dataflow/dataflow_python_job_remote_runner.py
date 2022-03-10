@@ -67,7 +67,7 @@ def create_python_job(python_module_path: str,
   python_file_path = stage_file(python_module_path)
   # If --setup_file or --requirements_file are provided stage them locally.
   for idx, param in enumerate(args_list):
-    if param in ('--requirements_file', '--setup_file'):
+    if param in ('--requirements_file', '--setup_file', '--sdk_location'):
       args_list[idx + 1] = stage_file(args_list[idx + 1])
       logging.info('Staging %s at %s locally.', param, args_list[idx + 1])
 
