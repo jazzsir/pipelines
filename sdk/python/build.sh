@@ -21,7 +21,7 @@
 #   ./build.sh [output_file]
 
 
-target_archive_file=${1:-kfp.tar.gz}
+target_archive_file=${1:-nkfp.tar.gz}
 
 pushd "$(dirname "$0")"
 dist_dir=$(mktemp -d)

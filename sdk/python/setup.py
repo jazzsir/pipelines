@@ -17,8 +17,8 @@ import re
 
 from setuptools import setup
 
-NAME = 'kfp'
-#VERSION = .... Change the version in kfp/__init__.py
+NAME = 'nkfp'
+#VERSION = .... Change the version in nkfp/__init__.py
 
 # NOTICE, after any updates to the following, ./requirements.in should be updated
 # accordingly.
@@ -81,7 +81,7 @@ def find_version(*file_path_parts):
 
 setup(
     name=NAME,
-    version=find_version('kfp', '__init__.py'),
+    version=find_version('nkfp', '__init__.py'),
     description='KubeFlow Pipelines SDK',
     author='The Kubeflow Authors',
     url="https://github.com/kubeflow/pipelines",
@@ -98,22 +98,22 @@ setup(
     install_requires=REQUIRES,
     extras_require=EXTRAS_REQUIRE,
     packages=[
-        'kfp',
-        'kfp.auth',
-        'kfp.cli',
-        'kfp.cli.diagnose_me',
-        'kfp.compiler',
-        'kfp.components',
-        'kfp.components.structures',
-        'kfp.containers',
-        'kfp.dsl',
-        'kfp.dsl.extensions',
-        'kfp.notebook',
-        'kfp.v2',
-        'kfp.v2.compiler',
-        'kfp.v2.components',
-        'kfp.v2.components.types',
-        'kfp.v2.dsl',
+        'nkfp',
+        'nkfp.auth',
+        'nkfp.cli',
+        'nkfp.cli.diagnose_me',
+        'nkfp.compiler',
+        'nkfp.components',
+        'nkfp.components.structures',
+        'nkfp.containers',
+        'nkfp.dsl',
+        'nkfp.dsl.extensions',
+        'nkfp.notebook',
+        'nkfp.v2',
+        'nkfp.v2.compiler',
+        'nkfp.v2.components',
+        'nkfp.v2.components.types',
+        'nkfp.v2.dsl',
     ],
     classifiers=[
         'Intended Audience :: Developers',
@@ -135,8 +135,8 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'dsl-compile = kfp.compiler.main:main',
-            'dsl-compile-v2 = kfp.v2.compiler.main:main',
-            'kfp=kfp.__main__:main'
+            'dsl-compile = nkfp.compiler.main:main',
+            'dsl-compile-v2 = nkfp.v2.compiler.main:main',
+            'nkfp=nkfp.__main__:main'
         ]
     })
