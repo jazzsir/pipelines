@@ -30,6 +30,7 @@ from kfp.cli import components
 
 @click.group()
 @click.option('--endpoint', help='Endpoint of the KFP API service to connect.')
+@click.option('--token', help='Token of the KFP API service to connect.')
 @click.option('--iap-client-id', help='Client ID for IAP protected endpoint.')
 @click.option(
     '-n',
@@ -50,7 +51,7 @@ from kfp.cli import components
     show_default=True,
     help='The formatting style for command output.')
 @click.pass_context
-def cli(ctx: click.Context, endpoint: str, iap_client_id: str, namespace: str,
+def cli(ctx: click.Context, endpoint: str, token: str, iap_client_id: str, namespace: str,
         other_client_id: str, other_client_secret: str, output: OutputFormat):
     """kfp is the command line interface to KFP service.
 
@@ -60,8 +61,7 @@ def cli(ctx: click.Context, endpoint: str, iap_client_id: str, namespace: str,
     if ctx.invoked_subcommand == 'diagnose_me':
         # Do not create a client for diagnose_me
         return
-    ctx.obj['client'] = Client(endpoint, iap_client_id, namespace,
-                               other_client_id, other_client_secret)
+    ctx.obj['client'] = Client(host=endpoint, existing_token=token)
     ctx.obj['namespace'] = namespace
     ctx.obj['output'] = output
 

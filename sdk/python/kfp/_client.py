@@ -186,15 +186,6 @@ class Client(object):
             api_client)
         self._healthz_api = kfp_server_api.api.healthz_service_api.HealthzServiceApi(
             api_client)
-        if not self._context_setting['namespace'] and self.get_kfp_healthz(
-        ).multi_user is True:
-            try:
-                with open(Client.NAMESPACE_PATH, 'r') as f:
-                    current_namespace = f.read()
-                    self.set_user_namespace(current_namespace)
-            except FileNotFoundError:
-                logging.info(
-                    'Failed to automatically set namespace.', exc_info=False)
 
     def _load_config(self, host, client_id, namespace, other_client_id,
                      other_client_secret, existing_token, proxy, ssl_ca_cert,

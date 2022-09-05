@@ -1,5 +1,4 @@
-# Copyright 2019 The Kubeflow Authors
-#
+# Copyright 2019 The Kubeflow Authors#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -15,6 +14,7 @@
 import click
 import json
 from typing import List, Optional
+from kfp._client import Client
 
 import kfp_server_api
 from kfp.cli.output import print_output, OutputFormat
@@ -27,16 +27,20 @@ def pipeline():
 
 
 @pipeline.command()
+@click.option("-e", "--endpoint", help='Endpoint of the KFP API service to connect.')
+@click.option("-t", "--token", help='Token of the KFP API service to connect.')
 @click.option("-p", "--pipeline-name", help="Name of the pipeline.")
 @click.option("-d", "--description", help="Description for the pipeline.")
 @click.argument("package-file")
 @click.pass_context
 def upload(ctx: click.Context,
+           endpoint: str,
+           token: str,
            pipeline_name: str,
            package_file: str,
            description: str = None):
     """Upload a KFP pipeline."""
-    client = ctx.obj["client"]
+    client = Client(host=endpoint, existing_token=token)
     output_format = ctx.obj["output"]
     if not pipeline_name:
         pipeline_name = package_file.split(".")[0]
@@ -46,6 +50,8 @@ def upload(ctx: click.Context,
 
 
 @pipeline.command()
+@click.option("-e", "--endpoint", help='Endpoint of the KFP API service to connect.')
+@click.option("-t", "--token", help='Token of the KFP API service to connect.')
 @click.option("-p", "--pipeline-id", help="ID of the pipeline", required=False)
 @click.option("-n", "--pipeline-name", help="Name of pipeline", required=False)
 @click.option(
@@ -56,20 +62,24 @@ def upload(ctx: click.Context,
 @click.argument("package-file")
 @click.pass_context
 def upload_version(ctx: click.Context,
+                   endpoint: str,
+                   token: str,
                    package_file: str,
                    pipeline_version: str,
                    pipeline_id: Optional[str] = None,
                    pipeline_name: Optional[str] = None):
     """Upload a version of the KFP pipeline."""
-    client = ctx.obj["client"]
+    client = Client(host=endpoint, existing_token=token)
     output_format = ctx.obj["output"]
     if bool(pipeline_id) == bool(pipeline_name):
         raise ValueError("Need to supply 'pipeline-name' or 'pipeline-id'")
     if pipeline_name is not None:
         pipeline_id = client.get_pipeline_id(name=pipeline_name)
         if pipeline_id is None:
-            raise ValueError("Can't find a pipeline with name: %s" %
-                             pipeline_name)
+            pipeline = client.upload_pipeline(package_file, pipeline_name, "")
+            _display_pipeline(pipeline, output_format)
+            print("%s is new pipeline" % pipeline_name)
+            pipeline_id = client.get_pipeline_id(name=pipeline_name)
     version = client.pipeline_uploads.upload_pipeline_version(
         package_file, name=pipeline_version, pipelineid=pipeline_id)
     _display_pipeline_version(version, output_format)

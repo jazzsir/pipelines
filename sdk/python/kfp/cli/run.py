@@ -32,6 +32,8 @@ def run():
 
 
 @run.command()
+@click.option('--endpoint', default='', help='Endpoint of the KFP API service to connect.')
+@click.option('--token', default='', help='Token of the KFP API service to connect.')
 @click.option(
     '-e', '--experiment-id', help='Parent experiment ID of listed runs.')
 @click.option(
@@ -50,10 +52,10 @@ def run():
         "(see [filter.proto](https://github.com/kubeflow/pipelines/blob/master/backend/api/filter.proto))."
     ))
 @click.pass_context
-def list(ctx: click.Context, experiment_id: str, page_token: str, max_size: int,
+def list(ctx: click.Context, endpoint: str, token: str, experiment_id: str, page_token: str, max_size: int,
          sort_by: str, filter: str):
     """list recent KFP runs."""
-    client = ctx.obj['client']
+    client = Client(host=endpoint, existing_token=token)
     output_format = ctx.obj['output']
     response = client.list_runs(
         experiment_id=experiment_id,
@@ -72,6 +74,8 @@ def list(ctx: click.Context, experiment_id: str, page_token: str, max_size: int,
 
 
 @run.command()
+@click.option('--endpoint', default='', help='Endpoint of the KFP API service to connect.')
+@click.option('--token', default='', help='Token of the KFP API service to connect.')
 @click.option(
     '-e',
     '--experiment-name',
@@ -100,11 +104,11 @@ def list(ctx: click.Context, experiment_id: str, page_token: str, max_size: int,
     type=int)
 @click.argument('args', nargs=-1)
 @click.pass_context
-def submit(ctx: click.Context, experiment_name: str, run_name: str,
+def submit(ctx: click.Context, endpoint: str, token: str, experiment_name: str, run_name: str,
            package_file: str, pipeline_id: str, pipeline_name: str, watch: bool,
            timeout: int, version: str, args: List[str]):
     """submit a KFP run."""
-    client = ctx.obj['client']
+    client = Client(host=endpoint, existing_token=token)
     namespace = ctx.obj['namespace']
     output_format = ctx.obj['output']
     if not run_name:
@@ -133,7 +137,6 @@ def submit(ctx: click.Context, experiment_name: str, run_name: str,
         _wait_for_run_completion(client, run.id, timeout, output_format)
     else:
         _display_run(client, namespace, run.id, watch, output_format)
-
 
 @run.command()
 @click.option(
@@ -205,8 +208,11 @@ def _display_run(client: click.Context,
             return
     if argo_workflow_name:
         subprocess.run(
-            [argo_path, 'watch', argo_workflow_name, '-n', namespace])
+            [argo_path, 'watch', argo_workflow_name])
         _print_runs([run], output_format)
+#        subprocess.run(
+#            [argo_path, 'watch', argo_workflow_name, '-n', namespace])
+#        _print_runs([run], output_format)
 
 
 def _wait_for_run_completion(client: Client, run_id: str, timeout: int,
