@@ -4,8 +4,8 @@ import os
 import re
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from kfp.dsl import _component_bridge
-from kfp import dsl
+from nkfp.dsl import _component_bridge
+from nkfp import dsl
 
 
 def fix_big_data_passing(workflow: dict) -> dict:

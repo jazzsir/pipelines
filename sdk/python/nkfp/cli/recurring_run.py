@@ -15,7 +15,7 @@
 from typing import Any, Dict, List, Optional
 import json
 import click
-from kfp.cli.output import print_output, OutputFormat
+from nkfp.cli.output import print_output, OutputFormat
 import kfp_server_api
 
 

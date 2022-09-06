@@ -12,23 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kfp.v2.components.component_decorator import component
+from nkfp.v2.components.component_decorator import component
 
-from kfp.v2.components.importer_node import importer
+from nkfp.v2.components.importer_node import importer
 
-from kfp.v2.components.pipeline_channel import (
+from nkfp.v2.components.pipeline_channel import (
     PipelineArtifactChannel,
     PipelineChannel,
     PipelineParameterChannel,
 )
-from kfp.v2.components.pipeline_context import pipeline
-from kfp.v2.components.pipeline_task import PipelineTask
-from kfp.v2.components.tasks_group import (
+from nkfp.v2.components.pipeline_context import pipeline
+from nkfp.v2.components.pipeline_task import PipelineTask
+from nkfp.v2.components.tasks_group import (
     Condition,
     ExitHandler,
     ParallelFor,
 )
-from kfp.v2.components.types.artifact_types import (
+from nkfp.v2.components.types.artifact_types import (
     Artifact,
     ClassificationMetrics,
     Dataset,
@@ -38,7 +38,7 @@ from kfp.v2.components.types.artifact_types import (
     Model,
     SlicedClassificationMetrics,
 )
-from kfp.v2.components.types.type_annotations import (
+from nkfp.v2.components.types.type_annotations import (
     Input,
     Output,
     InputPath,

@@ -19,9 +19,9 @@ import fire
 from google.protobuf import json_format
 import os
 
-from kfp.containers import _gcs_helper
-from kfp.containers import entrypoint_utils
-from kfp.dsl import artifact
+from nkfp.containers import _gcs_helper
+from nkfp.containers import entrypoint_utils
+from nkfp.dsl import artifact
 from kfp.pipeline_spec import pipeline_spec_pb2
 
 FN_SOURCE = 'ml/main.py'

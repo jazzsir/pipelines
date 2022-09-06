@@ -16,12 +16,12 @@ import enum
 from typing import Callable, Optional, Union
 
 from kubernetes.client.models import V1PodDNSConfig
-from kfp.dsl import _container_op
-from kfp.dsl import _resource_op
-from kfp.dsl import _ops_group
-from kfp.dsl import _component_bridge
-from kfp.components import _components
-from kfp.components import _naming
+from nkfp.dsl import _container_op
+from nkfp.dsl import _resource_op
+from nkfp.dsl import _ops_group
+from nkfp.dsl import _component_bridge
+from nkfp.components import _components
+from nkfp.components import _naming
 import sys
 
 # This handler is called whenever the @pipeline decorator is applied.
@@ -201,9 +201,9 @@ class PipelineConf():
         Example:
           ::
 
-            import kfp
+            import nkfp
             from kubernetes.client.models import V1PodDNSConfig, V1PodDNSConfigOption
-            pipeline_conf = kfp.dsl.PipelineConf()
+            pipeline_conf = nkfp.dsl.PipelineConf()
             pipeline_conf.set_dns_config(dns_config=V1PodDNSConfig(
                 nameservers=["1.2.3.4"],
                 options=[V1PodDNSConfigOption(name="ndots", value="2")],
@@ -223,7 +223,7 @@ class PipelineConf():
         Example:
           ::
 
-            from kfp.dsl import PipelineConf, data_passing_methods
+            from nkfp.dsl import PipelineConf, data_passing_methods
             from kubernetes.client.models import V1Volume, V1PersistentVolumeClaimVolumeSource
             pipeline_conf = PipelineConf()
             pipeline_conf.data_passing_method =

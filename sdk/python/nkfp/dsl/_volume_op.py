@@ -49,7 +49,7 @@ class VolumeOp(ResourceOp):
       volume_name: VolumeName is the binding reference to the PersistentVolume
         backing this claim.
       generate_unique_name: Generate unique name for the PVC
-      kwargs: See :py:class:`kfp.dsl.ResourceOp`
+      kwargs: See :py:class:`nkfp.dsl.ResourceOp`
 
     Raises:
       ValueError: if k8s_resource is provided along with other arguments

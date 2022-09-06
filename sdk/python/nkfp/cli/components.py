@@ -28,8 +28,8 @@ except ImportError:
 
 import typer
 
-import kfp
-from kfp.v2.components import component_factory, kfp_config, utils
+import nkfp
+from nkfp.v2.components import component_factory, kfp_config, utils
 
 _REQUIREMENTS_TXT = 'requirements.txt'
 
@@ -124,7 +124,7 @@ class _ComponentBuilder():
         self._maybe_copy_kfp_package = ''
 
         if kfp_package_path is None:
-            self._kfp_package_path = 'kfp=={}'.format(kfp.__version__)
+            self._kfp_package_path = 'kfp=={}'.format(nkfp.__version__)
         elif kfp_package_path.is_dir():
             _info('Building KFP package from local directory {}'.format(
                 typer.style(str(kfp_package_path), fg=typer.colors.CYAN)))

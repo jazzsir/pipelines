@@ -21,8 +21,8 @@ import datetime
 from typing import List
 
 import kfp_server_api
-from kfp._client import Client
-from kfp.cli.output import print_output, OutputFormat
+from nkfp._client import Client
+from nkfp.cli.output import print_output, OutputFormat
 
 
 @click.group()

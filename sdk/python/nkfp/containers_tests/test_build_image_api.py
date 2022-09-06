@@ -17,7 +17,7 @@ import unittest
 from pathlib import Path
 from typing import Callable
 
-from kfp.containers import build_image_from_working_dir
+from nkfp.containers import build_image_from_working_dir
 
 
 class MockImageBuilder:
@@ -102,7 +102,7 @@ COPY . .
     def test_image_cache(self):
         builder = InvocationCountingDummyImageBuilder()
 
-        from kfp.containers._cache import clear_cache
+        from nkfp.containers._cache import clear_cache
         clear_cache('build_image_from_working_dir')
 
         self.assertEqual(builder.invocations_count, 0)

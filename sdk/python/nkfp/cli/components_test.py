@@ -24,13 +24,13 @@ from unittest import mock
 from typer import testing
 
 # Docker is an optional install, but we need the import to succeed for tests.
-# So we patch it before importing kfp.cli.components.
+# So we patch it before importing nkfp.cli.components.
 if importlib.util.find_spec('docker') is None:
     sys.modules['docker'] = mock.Mock()
-from kfp.cli import components
+from nkfp.cli import components
 
 _COMPONENT_TEMPLATE = '''
-from kfp.v2.dsl import *
+from nkfp.v2.dsl import *
 
 @component(
   base_image={base_image},
@@ -46,7 +46,7 @@ def _make_component(func_name: str,
                     target_image: Optional[str] = None,
                     output_component_file: Optional[str] = None) -> str:
     return textwrap.dedent('''
-    from kfp.v2.dsl import *
+    from nkfp.v2.dsl import *
 
     @component(
         base_image={base_image},
@@ -386,7 +386,7 @@ class Test(unittest.TestCase):
         self._docker_client.api.build.assert_called_once()
         self._docker_client.images.push.assert_not_called()
 
-    @mock.patch('kfp.__version__', '1.2.3')
+    @mock.patch('nkfp.__version__', '1.2.3')
     def testDockerfileIsCreatedCorrectly(self):
         component = _make_component(
             func_name='train', target_image='custom-image')
@@ -428,7 +428,7 @@ class Test(unittest.TestCase):
         self.assertFileExistsAndContains('Dockerfile',
                                          'Existing Dockerfile contents')
 
-    @mock.patch('kfp.__version__', '1.2.3')
+    @mock.patch('nkfp.__version__', '1.2.3')
     def testExistingDockerfileCanBeOverwritten(self):
         component = _make_component(
             func_name='train', target_image='custom-image')

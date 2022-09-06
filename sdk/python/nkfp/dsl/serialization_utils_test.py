@@ -11,10 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.dsl.serialization_utils module."""
+"""Tests for nkfp.dsl.serialization_utils module."""
 import unittest
 
-from kfp.dsl import serialization_utils
+from nkfp.dsl import serialization_utils
 
 _DICT_DATA = {
     'int1': 1,

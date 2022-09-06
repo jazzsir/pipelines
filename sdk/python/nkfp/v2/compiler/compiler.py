@@ -28,17 +28,17 @@ from typing import (Any, Callable, Dict, List, Mapping, Optional, Set, Tuple,
 import kfp
 from google.protobuf import json_format
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.v2 import dsl
-from kfp.v2.compiler import pipeline_spec_builder as builder
-from kfp.v2.components import utils as component_utils
-from kfp.v2.components import component_factory
-from kfp.v2.components import for_loop
-from kfp.v2.components import pipeline_channel
-from kfp.v2.components import pipeline_context
-from kfp.v2.components import pipeline_task
-from kfp.v2.components import tasks_group
-from kfp.v2.components.types import artifact_types
-from kfp.v2.components.types import type_utils
+from nkfp.v2 import dsl
+from nkfp.v2.compiler import pipeline_spec_builder as builder
+from nkfp.v2.components import utils as component_utils
+from nkfp.v2.components import component_factory
+from nkfp.v2.components import for_loop
+from nkfp.v2.components import pipeline_channel
+from nkfp.v2.components import pipeline_context
+from nkfp.v2.components import pipeline_task
+from nkfp.v2.components import tasks_group
+from nkfp.v2.components.types import artifact_types
+from nkfp.v2.components.types import type_utils
 
 _GroupOrTask = Union[tasks_group.TasksGroup, pipeline_task.PipelineTask]
 
@@ -62,7 +62,7 @@ class Compiler:
         def my_pipeline(a: int = 1, b: str = "default value"):
             ...
 
-        kfp.v2.compiler.Compiler().compile(
+        nkfp.v2.compiler.Compiler().compile(
             pipeline_func=my_pipeline,
             package_path='path/to/pipeline.json',
         )
@@ -88,9 +88,9 @@ class Compiler:
             type_check: Optional; whether to enable the type check or not.
                 Default is True.
         """
-        type_check_old_value = kfp.TYPE_CHECK
+        type_check_old_value = nkfp.TYPE_CHECK
         try:
-            kfp.TYPE_CHECK = type_check
+            nkfp.TYPE_CHECK = type_check
             pipeline_spec = self._create_pipeline_v2(
                 pipeline_func=pipeline_func,
                 pipeline_name=pipeline_name,
@@ -101,7 +101,7 @@ class Compiler:
                 output_path=package_path,
             )
         finally:
-            kfp.TYPE_CHECK = type_check_old_value
+            nkfp.TYPE_CHECK = type_check_old_value
 
     def _create_pipeline_v2(
         self,
@@ -278,7 +278,7 @@ class Compiler:
         pipeline_spec = pipeline_spec_pb2.PipelineSpec()
 
         pipeline_spec.pipeline_info.name = pipeline.name
-        pipeline_spec.sdk_version = 'kfp-{}'.format(kfp.__version__)
+        pipeline_spec.sdk_version = 'kfp-{}'.format(nkfp.__version__)
         # Schema version 2.1.0 is required for kfp-pipeline-spec>0.1.13
         pipeline_spec.schema_version = '2.1.0'
 

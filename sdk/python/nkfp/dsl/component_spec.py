@@ -15,10 +15,10 @@
 
 from typing import List, Optional, Tuple, Union
 
-from kfp.components import _structures as structures
-from kfp.dsl import _for_loop, _pipeline_param, dsl_utils
+from nkfp.components import _structures as structures
+from nkfp.dsl import _for_loop, _pipeline_param, dsl_utils
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.v2.components.types import type_utils
+from nkfp.v2.components.types import type_utils
 
 
 def additional_input_name_for_pipelineparam(

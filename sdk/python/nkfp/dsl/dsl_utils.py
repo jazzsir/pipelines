@@ -16,7 +16,7 @@
 import re
 from typing import Callable, List, Optional, Union
 
-from kfp.components import _structures
+from nkfp.components import _structures
 from kfp.pipeline_spec import pipeline_spec_pb2
 
 _COMPONENT_NAME_PREFIX = 'comp-'

@@ -16,10 +16,10 @@
 import enum
 from typing import Optional, Union
 
-from kfp.v2.components import for_loop
-from kfp.v2.components import pipeline_context
-from kfp.v2.components import pipeline_channel
-from kfp.v2.components import pipeline_task
+from nkfp.v2.components import for_loop
+from nkfp.v2.components import pipeline_context
+from nkfp.v2.components import pipeline_channel
+from nkfp.v2.components import pipeline_task
 
 
 class TasksGroupType(str, enum.Enum):

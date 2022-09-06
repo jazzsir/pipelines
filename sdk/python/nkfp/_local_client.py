@@ -380,7 +380,7 @@ class LocalClient:
         """Run ops in current group in topological order.
 
         Args:
-            pipeline: kfp.dsl.Pipeline
+            pipeline: nkfp.dsl.Pipeline
             pipeline_dag: DAG of pipeline ops
             current_group: current ops group
             stack: stack to trace `LoopArguments`
@@ -448,7 +448,7 @@ class LocalClient:
 
         Args:
             run_name: str, the name of this run, can be used to query the run result
-            pipeline: kfp.dsl.Pipeline
+            pipeline: nkfp.dsl.Pipeline
             pipeline_dag: DAG of pipeline ops
             current_group: current ops group
             stack: stack to trace `LoopArguments`
@@ -506,7 +506,7 @@ class LocalClient:
         Parameters:
           pipeline_func: pipeline function
           arguments: Arguments to the pipeline function provided as a dict, reference
-              to `kfp.client.create_run_from_pipeline_func`
+              to `nkfp.client.create_run_from_pipeline_func`
           execution_mode: Configuration to decide whether the client executes component
               in docker or in local process.
         """

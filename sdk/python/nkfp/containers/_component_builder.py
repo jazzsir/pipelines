@@ -25,11 +25,11 @@ from deprecated.sphinx import deprecated
 from ..components._components import _create_task_factory_from_component_spec
 from ..components._python_op import _func_to_component_spec
 from ._container_builder import ContainerBuilder
-from kfp import components
-from kfp import dsl
-from kfp.components import _components
-from kfp.components import _structures
-from kfp.containers import entrypoint
+from nkfp import components
+from nkfp import dsl
+from nkfp.components import _components
+from nkfp.components import _structures
+from nkfp.containers import entrypoint
 
 V2_COMPONENT_ANNOTATION = 'pipelines.kubeflow.org/component_v2'
 _PROGRAM_LAUNCHER_CMD = 'program_path=$(mktemp)\nprintf "%s" "$0" > ' \
@@ -218,7 +218,7 @@ def _purge_program_launching_code(
     if is_v2:
         # TODO: Implement the v2 component entrypoint on KFP.
         # The following are just placeholders.
-        commands[program_code_index] = 'kfp.containers.entrypoint'
+        commands[program_code_index] = 'nkfp.containers.entrypoint'
         commands.pop(program_launcher_index)
         commands[program_launcher_index - 1] = '-m'
         commands[program_launcher_index - 2] = 'python'
@@ -398,7 +398,7 @@ def build_python_component(
 
 @deprecated(
     version='0.1.32',
-    reason='`build_docker_image` is deprecated. Use `kfp.containers.build_image_from_working_dir` instead.'
+    reason='`build_docker_image` is deprecated. Use `nkfp.containers.build_image_from_working_dir` instead.'
 )
 def build_docker_image(staging_gcs_path,
                        target_image,

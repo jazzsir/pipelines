@@ -18,14 +18,14 @@ import sys
 import click
 import typer
 
-from kfp._client import Client
-from kfp.cli.run import run
-from kfp.cli.recurring_run import recurring_run
-from kfp.cli.pipeline import pipeline
-from kfp.cli.diagnose_me_cli import diagnose_me
-from kfp.cli.experiment import experiment
-from kfp.cli.output import OutputFormat
-from kfp.cli import components
+from nkfp._client import Client
+from nkfp.cli.run import run
+from nkfp.cli.recurring_run import recurring_run
+from nkfp.cli.pipeline import pipeline
+from nkfp.cli.diagnose_me_cli import diagnose_me
+from nkfp.cli.experiment import experiment
+from nkfp.cli.output import OutputFormat
+from nkfp.cli import components
 
 
 @click.group()

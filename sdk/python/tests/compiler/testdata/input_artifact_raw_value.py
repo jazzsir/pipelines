@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, __file__ + '/../../../../')
 
 import kfp
-from kfp import dsl
+from nkfp import dsl
 
 
 def component_with_inline_input_artifact(text: str):

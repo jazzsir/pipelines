@@ -24,11 +24,11 @@ import yaml
 from google.protobuf import json_format
 from google.protobuf import struct_pb2
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.dsl import serialization_utils
-from kfp.dsl import artifact_utils
+from nkfp.dsl import serialization_utils
+from nkfp.dsl import artifact_utils
 
-KFP_ARTIFACT_ONTOLOGY_MODULE = 'kfp.dsl.ontology_artifacts'
-DEFAULT_ARTIFACT_SCHEMA = 'title: kfp.Artifact\ntype: object\nproperties:\n'
+KFP_ARTIFACT_ONTOLOGY_MODULE = 'nkfp.dsl.ontology_artifacts'
+DEFAULT_ARTIFACT_SCHEMA = 'title: nkfp.Artifact\ntype: object\nproperties:\n'
 
 
 class Artifact(object):
@@ -45,7 +45,7 @@ class Artifact(object):
        instance schema.
     """
 
-    TYPE_NAME = "kfp.Artifact"
+    TYPE_NAME = "nkfp.Artifact"
 
     # Initialization flag to support setattr / getattr behavior.
     _initialized = False
@@ -191,7 +191,7 @@ class Artifact(object):
             cls, artifact: pipeline_spec_pb2.RuntimeArtifact) -> Any:
         """Deserializes an Artifact object from RuntimeArtifact message."""
         instance_schema = yaml.safe_load(artifact.type.instance_schema)
-        type_name = instance_schema['title'][len('kfp.'):]
+        type_name = instance_schema['title'][len('nkfp.'):]
         result = None
         try:
             artifact_cls = getattr(

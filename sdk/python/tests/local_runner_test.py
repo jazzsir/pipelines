@@ -16,7 +16,7 @@ import unittest
 from typing import Callable
 
 import kfp
-from kfp import LocalClient, run_pipeline_func_locally
+from nkfp import LocalClient, run_pipeline_func_locally
 
 InputPath = kfp.components.InputPath()
 OutputPath = kfp.components.OutputPath()

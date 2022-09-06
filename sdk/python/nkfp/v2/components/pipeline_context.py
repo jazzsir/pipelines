@@ -15,9 +15,9 @@
 
 from typing import Callable, Optional
 
-from kfp.v2.components import pipeline_task
-from kfp.v2.components import tasks_group
-from kfp.v2.components import utils
+from nkfp.v2.components import pipeline_task
+from nkfp.v2.components import tasks_group
+from nkfp.v2.components import utils
 
 # This handler is called whenever the @pipeline decorator is applied.
 # It can be used by command-line DSL compiler to inject code that runs for every

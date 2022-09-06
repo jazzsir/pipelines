@@ -53,7 +53,7 @@ def pipeline(my_pipe_param: int = 10):
 
 
 if __name__ == '__main__':
-    from kfp import compiler
+    from nkfp import compiler
     import kfp
     import time
     client = kfp.Client(host='127.0.0.1:8080/pipeline')

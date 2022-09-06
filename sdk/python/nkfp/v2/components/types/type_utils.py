@@ -18,10 +18,10 @@ import re
 import warnings
 from typing import Dict, List, Optional, Type, Union
 
-from kfp.components import structures
+from nkfp.components import structures
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.v2.components.types import artifact_types
-from kfp.v2.components.types import type_annotations
+from nkfp.v2.components.types import artifact_types
+from nkfp.v2.components.types import type_annotations
 
 PARAMETER_TYPES = Union[str, int, float, bool, dict, list]
 
@@ -234,8 +234,8 @@ def verify_type_compatibility(
         error_text = error_message_prefix + (
             'Argument type "{}" is incompatible with the input type "{}"'
         ).format(str(given_type), str(expected_type))
-        import kfp
-        if kfp.TYPE_CHECK:
+        import nkfp
+        if nkfp.TYPE_CHECK:
             raise InconsistentTypeException(error_text)
         else:
             warnings.warn(InconsistentTypeWarning(error_text))

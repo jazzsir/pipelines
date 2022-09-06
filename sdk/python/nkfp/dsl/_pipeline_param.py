@@ -217,7 +217,7 @@ class PipelineParam(object):
         # We make repr return the placeholder string so that if someone uses
         # str()-based serialization of complex objects containing `PipelineParam`,
         # it works properly.
-        # (e.g. str([1, 2, 3, kfp.dsl.PipelineParam("aaa"), 4, 5, 6,]))
+        # (e.g. str([1, 2, 3, nkfp.dsl.PipelineParam("aaa"), 4, 5, 6,]))
         return str(self)
 
     def to_struct(self):

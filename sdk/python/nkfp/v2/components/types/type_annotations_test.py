@@ -11,15 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.v2.components.types.type_annotations."""
+"""Tests for nkfp.v2.components.types.type_annotations."""
 
 import unittest
 from typing import Any, Dict, List, Optional
 
 from absl.testing import parameterized
-from kfp.v2.components.types import type_annotations
-from kfp.v2.components.types.artifact_types import Model
-from kfp.v2.components.types.type_annotations import (Input, InputAnnotation,
+from nkfp.v2.components.types import type_annotations
+from nkfp.v2.components.types.artifact_types import Model
+from nkfp.v2.components.types.type_annotations import (Input, InputAnnotation,
                                                       InputPath, Output,
                                                       OutputAnnotation,
                                                       OutputPath)

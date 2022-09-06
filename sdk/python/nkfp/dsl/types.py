@@ -19,7 +19,7 @@ Feature stage:
 from typing import Dict, Union
 import warnings
 
-from kfp.v2.components.types import type_utils
+from nkfp.v2.components.types import type_utils
 
 
 class BaseType:
@@ -157,8 +157,8 @@ def verify_type_compatibility(given_type: TypeSpecType,
         error_text = error_message_prefix + (
             'Argument type "{}" is incompatible with the input type "{}"'
         ).format(str(given_type), str(expected_type))
-        import kfp
-        if kfp.TYPE_CHECK:
+        import nkfp
+        if nkfp.TYPE_CHECK:
             raise InconsistentTypeException(error_text)
         else:
             warnings.warn(InconsistentTypeWarning(error_text))

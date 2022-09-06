@@ -14,7 +14,7 @@
 from typing import Union
 import uuid
 
-from kfp.dsl import _for_loop, _pipeline_param
+from nkfp.dsl import _for_loop, _pipeline_param
 
 from . import _container_op
 from . import _pipeline

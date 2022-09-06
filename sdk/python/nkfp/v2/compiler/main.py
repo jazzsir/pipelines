@@ -19,9 +19,9 @@ import os
 import sys
 from typing import Any, Callable, List, Mapping, Optional
 
-import kfp.dsl as dsl
-from kfp.v2 import compiler
-from kfp.v2.components import pipeline_context
+import nkfp.dsl as dsl
+from nkfp.v2 import compiler
+from nkfp.v2.components import pipeline_context
 
 
 def parse_arguments() -> argparse.Namespace:

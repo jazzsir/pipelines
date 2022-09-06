@@ -16,7 +16,7 @@
 
 import enum
 from typing import List, Text
-from kfp.cli.diagnose_me import utility
+from nkfp.cli.diagnose_me import utility
 
 
 class Commands(enum.Enum):

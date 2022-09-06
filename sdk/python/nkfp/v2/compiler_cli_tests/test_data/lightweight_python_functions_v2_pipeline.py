@@ -14,9 +14,9 @@
 """Sample pipeline for passing data in KFP v2."""
 from typing import Dict, List
 
-from kfp.v2 import compiler
-from kfp.v2 import dsl
-from kfp.v2.dsl import (Dataset, Input, InputPath, Model, Output, OutputPath,
+from nkfp.v2 import compiler
+from nkfp.v2 import dsl
+from nkfp.v2.dsl import (Dataset, Input, InputPath, Model, Output, OutputPath,
                         component)
 
 

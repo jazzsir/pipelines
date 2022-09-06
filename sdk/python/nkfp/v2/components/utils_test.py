@@ -11,12 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.v2.components.utils."""
+"""Tests for nkfp.v2.components.utils."""
 
 import unittest
 
 from absl.testing import parameterized
-from kfp.v2.components import utils
+from nkfp.v2.components import utils
 
 
 class UtilsTest(parameterized.TestCase):

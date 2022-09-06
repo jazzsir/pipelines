@@ -14,9 +14,9 @@
 """Lightweight functions v2 with outputs."""
 from typing import NamedTuple
 
-from kfp.v2 import compiler
-from kfp.v2 import dsl
-from kfp.v2.dsl import component, Input, Dataset, Model, Metrics
+from nkfp.v2 import compiler
+from nkfp.v2 import dsl
+from nkfp.v2.dsl import component, Input, Dataset, Model, Metrics
 
 
 @component

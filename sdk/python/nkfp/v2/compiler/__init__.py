@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kfp.v2.compiler.compiler import Compiler
+from nkfp.v2.compiler.compiler import Compiler

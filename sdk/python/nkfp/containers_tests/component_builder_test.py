@@ -11,16 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.containers._component_builder module."""
+"""Tests for nkfp.containers._component_builder module."""
 import os
 import shutil
 import tempfile
 import unittest
 from unittest import mock
 
-from kfp.containers import _component_builder
-from kfp.containers import _container_builder
-from kfp import components
+from nkfp.containers import _component_builder
+from nkfp.containers import _container_builder
+from nkfp import components
 
 _TEST_TARGET_IMAGE = 'gcr.io/my-project/my-image'
 _TEST_STAGING_LOCATION = 'gs://my-project/tmp'

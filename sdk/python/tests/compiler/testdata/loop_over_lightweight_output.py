@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import kfp
-from kfp import dsl
+from nkfp import dsl
 from kfp.dsl import _for_loop
 
 produce_op = kfp.components.load_component_from_text('''\

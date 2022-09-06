@@ -15,12 +15,12 @@
 
 from typing import Any, Union, Optional, Type, Mapping
 
-from kfp.v2.components import pipeline_task
-from kfp.v2.components import pipeline_channel
-from kfp.v2.components import placeholders
-from kfp.v2.components import structures
-from kfp.v2.components import importer_component
-from kfp.v2.components.types import artifact_types
+from nkfp.v2.components import pipeline_task
+from nkfp.v2.components import pipeline_channel
+from nkfp.v2.components import placeholders
+from nkfp.v2.components import structures
+from nkfp.v2.components import importer_component
+from nkfp.v2.components.types import artifact_types
 
 INPUT_KEY = 'uri'
 OUTPUT_KEY = 'artifact'

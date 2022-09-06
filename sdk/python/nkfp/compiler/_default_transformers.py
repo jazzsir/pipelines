@@ -15,7 +15,7 @@
 import warnings
 from kubernetes import client as k8s_client
 from typing import Callable, Dict, Optional, Text
-from kfp.dsl._container_op import BaseOp, ContainerOp
+from nkfp.dsl._container_op import BaseOp, ContainerOp
 
 
 def add_pod_env(op: BaseOp) -> BaseOp:

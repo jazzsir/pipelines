@@ -13,7 +13,7 @@
 # limitations under the License.
 """Two step v2-compatible pipeline."""
 
-from kfp import components, dsl
+from nkfp import components, dsl
 from kfp.components import InputPath, OutputPath
 
 

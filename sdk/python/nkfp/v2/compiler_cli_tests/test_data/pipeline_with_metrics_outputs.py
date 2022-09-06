@@ -15,10 +15,10 @@
 
 from typing import NamedTuple
 
-from kfp.v2 import components
-from kfp.v2 import dsl
-from kfp.v2 import compiler
-from kfp.v2.dsl import component, Dataset, Input, Metrics, Output
+from nkfp.v2 import components
+from nkfp.v2 import dsl
+from nkfp.v2 import compiler
+from nkfp.v2.dsl import component, Dataset, Input, Metrics, Output
 
 
 @component

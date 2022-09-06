@@ -35,7 +35,7 @@ class VolumeSnapshotOp(ResourceOp):
         VolumeSnapshot
       annotations: Annotations to be patched in the VolumeSnapshot
       volume: An instance of V1Volume
-      kwargs: See :py:class:`kfp.dsl.ResourceOp`
+      kwargs: See :py:class:`nkfp.dsl.ResourceOp`
 
     Raises:
       ValueError: if k8s_resource is provided along with other arguments

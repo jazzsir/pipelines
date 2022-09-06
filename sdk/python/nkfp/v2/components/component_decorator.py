@@ -15,7 +15,7 @@
 import functools
 from typing import Callable, Optional, List
 
-from kfp.v2.components import component_factory
+from nkfp.v2.components import component_factory
 
 
 def component(func: Optional[Callable] = None,
@@ -45,7 +45,7 @@ def component(func: Optional[Callable] = None,
 
     Example usage:
 
-    from kfp.v2 import dsl
+    from nkfp.v2 import dsl
     @dsl.component
     def my_function_one(input: str, output: Output[Model]):
       ...

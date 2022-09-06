@@ -14,8 +14,8 @@
 
 import argparse
 from typing import Optional
-from kfp import dsl
-import kfp.compiler
+from nkfp import dsl
+import nkfp.compiler
 import os
 import sys
 from deprecated.sphinx import deprecated
@@ -82,7 +82,7 @@ def _compile_pipeline_function(
     else:
         pipeline_func = pipeline_funcs[0]
 
-    kfp.compiler.Compiler(mode=mode).compile(pipeline_func, output_path,
+    nkfp.compiler.Compiler(mode=mode).compile(pipeline_func, output_path,
                                              type_check, pipeline_conf)
 
 
@@ -129,11 +129,11 @@ def main():
         mode_str = os.environ.get(_KF_PIPELINES_COMPILER_MODE_ENV, 'V1')
     mode = None
     if mode_str == 'V1_LEGACY' or mode_str == 'V1':
-        mode = kfp.dsl.PipelineExecutionMode.V1_LEGACY
+        mode = nkfp.dsl.PipelineExecutionMode.V1_LEGACY
     elif mode_str == 'V2_COMPATIBLE':
-        mode = kfp.dsl.PipelineExecutionMode.V2_COMPATIBLE
+        mode = nkfp.dsl.PipelineExecutionMode.V2_COMPATIBLE
     elif mode_str == 'V2_ENGINE':
-        mode = kfp.dsl.PipelineExecutionMode.V2_ENGINE
+        mode = nkfp.dsl.PipelineExecutionMode.V2_ENGINE
     else:
         raise ValueError(
             f'Got unexpected --mode option "{mode_str}", it must be one of V1, V2_COMPATIBLE or V2_ENGINE'

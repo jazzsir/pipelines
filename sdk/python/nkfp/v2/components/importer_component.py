@@ -13,8 +13,8 @@
 # limitations under the License.
 """Importer-based component."""
 
-from kfp.v2.components import base_component
-from kfp.v2.components import structures
+from nkfp.v2.components import base_component
+from nkfp.v2.components import structures
 
 
 class ImporterComponent(base_component.BaseComponent):

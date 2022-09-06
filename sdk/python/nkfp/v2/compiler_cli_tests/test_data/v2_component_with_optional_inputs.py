@@ -13,8 +13,8 @@
 # limitations under the License.
 from typing import Optional
 
-from kfp.v2 import compiler, dsl
-from kfp.v2.dsl import component
+from nkfp.v2 import compiler, dsl
+from nkfp.v2.dsl import component
 
 
 @component

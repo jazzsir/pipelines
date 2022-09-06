@@ -85,7 +85,7 @@ def build_image_from_working_dir(image_name: str = None,
         file_filter_re: Optional. A regular expression that will be used to decide which files to include in the container building context.
         timeout: Optional. The image building timeout in seconds.
         base_image: Optional. The container image to use as the base for the new image. If not set, the Google Deep Learning Tensorflow CPU image will be used.
-        builder: Optional. An instance of :py:class:`kfp.containers.ContainerBuilder` or compatible class that will be used to build the image.
+        builder: Optional. An instance of :py:class:`nkfp.containers.ContainerBuilder` or compatible class that will be used to build the image.
           The default builder uses "kubeflow-pipelines-container-builder" service account in "kubeflow" namespace. It works with Kubeflow Pipelines clusters installed in "kubeflow" namespace using Google Cloud Marketplace or Standalone with version > 0.4.0.
           If your Kubeflow Pipelines is installed in a different namespace, you should use :code:`ContainerBuilder(namespace='<your-kfp-namespace>', ...)`.
 

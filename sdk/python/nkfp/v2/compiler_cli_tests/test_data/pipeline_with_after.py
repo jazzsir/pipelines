@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kfp.v2 import components
-from kfp.v2 import dsl
-from kfp.v2 import compiler
+from nkfp.v2 import components
+from nkfp.v2 import dsl
+from nkfp.v2 import compiler
 
 component_op = components.load_component_from_text("""
 name: Print Text

@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.v2.components.yaml_component."""
+"""Tests for nkfp.v2.components.yaml_component."""
 
 import requests
 import unittest
@@ -20,8 +20,8 @@ import textwrap
 from pathlib import Path
 from unittest import mock
 
-from kfp.v2.components import yaml_component
-from kfp.v2.components import structures
+from nkfp.v2.components import yaml_component
+from nkfp.v2.components import structures
 
 SAMPLE_YAML = textwrap.dedent("""\
         name: component_1

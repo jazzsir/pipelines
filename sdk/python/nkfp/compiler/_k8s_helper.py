@@ -14,7 +14,7 @@
 
 import re
 
-from kfp import dsl
+from nkfp import dsl
 
 
 def sanitize_k8s_name(name, allow_capital_underscore=False):

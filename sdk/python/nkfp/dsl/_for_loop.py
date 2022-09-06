@@ -14,8 +14,8 @@
 import re
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from kfp import dsl
-from kfp.dsl import _pipeline_param
+from nkfp import dsl
+from nkfp.dsl import _pipeline_param
 
 ItemList = List[Union[int, float, str, Dict[str, Any]]]
 

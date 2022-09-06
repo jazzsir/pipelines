@@ -19,8 +19,8 @@ __all__ = [
     'load_component_from_file',
 ]
 
-from kfp.v2.components import base_component
-from kfp.v2.components import structures
+from nkfp.v2.components import base_component
+from nkfp.v2.components import structures
 
 
 class YamlComponent(base_component.BaseComponent):

@@ -11,10 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.v2.dsl.container_op."""
+"""Tests for nkfp.v2.dsl.container_op."""
 import unittest
 
-from kfp.dsl import _container_op
+from nkfp.dsl import _container_op
 from kfp.pipeline_spec import pipeline_spec_pb2
 
 from google.protobuf import text_format

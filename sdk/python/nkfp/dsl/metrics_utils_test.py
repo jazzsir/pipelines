@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.dsl.metrics_utils."""
+"""Tests for nkfp.dsl.metrics_utils."""
 
 import os
 import unittest
@@ -22,7 +22,7 @@ import jsonschema
 from google.protobuf import json_format
 from google.protobuf.struct_pb2 import Struct
 
-from kfp.dsl import metrics_utils
+from nkfp.dsl import metrics_utils
 
 from google.protobuf import json_format
 

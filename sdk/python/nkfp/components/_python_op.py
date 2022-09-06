@@ -34,7 +34,7 @@ from ._data_passing import serialize_value, get_deserializer_code_for_type_name,
 from ._naming import _make_name_unique_by_adding_index
 from .structures import *
 from . import _structures as structures
-from kfp.components import type_annotation_utils
+from nkfp.components import type_annotation_utils
 
 import inspect
 import itertools
@@ -526,7 +526,7 @@ def _func_to_component_spec(func,
         use_code_pickling: Specifies whether the function code should be captured using pickling as opposed to source code manipulation. Pickling has better support for capturing dependencies, but is sensitive to version mismatch between python in component creation environment and runtime image.
 
     Returns:
-        A :py:class:`kfp.components.structures.ComponentSpec` instance.
+        A :py:class:`nkfp.components.structures.ComponentSpec` instance.
     """
     decorator_base_image = getattr(func, '_component_base_image', None)
     if decorator_base_image is not None:
@@ -899,7 +899,7 @@ def func_to_container_op(
     annotations: Optional[Mapping[str, str]] = None,
 ):
     '''Converts a Python function to a component and returns a task
-      (:class:`kfp.dsl.ContainerOp`) factory.
+      (:class:`nkfp.dsl.ContainerOp`) factory.
 
     Function docstring is used as component description. Argument and return annotations are used as component input/output types.
 
@@ -922,7 +922,7 @@ def func_to_container_op(
 
     Returns:
         A factory function with a strongly-typed signature taken from the python function.
-        Once called with the required arguments, the factory constructs a pipeline task instance (:class:`kfp.dsl.ContainerOp`) that can run the original function in a container.
+        Once called with the required arguments, the factory constructs a pipeline task instance (:class:`nkfp.dsl.ContainerOp`) that can run the original function in a container.
     '''
 
     component_spec = _func_to_component_spec(
@@ -983,10 +983,10 @@ def create_component_from_func_v2(func: Callable,
     warnings.warn(
         'create_component_from_func_v2() has been deprecated and will be'
         ' removed in KFP v1.9. Please use'
-        ' @kfp.v2.dsl.component() instead.',
+        ' @nkfp.v2.dsl.component() instead.',
         category=FutureWarning,
     )
-    from kfp.v2.components import component_factory
+    from nkfp.v2.components import component_factory
     return component_factory.create_component_from_func(
         func=func,
         base_image=base_image,
@@ -1072,10 +1072,10 @@ def create_component_from_func(
             task2 = add_multiply_op(sum_output_ref, 5)
 
         Bigger data should be read from files and written to files.
-        Use the :py:class:`kfp.components.InputPath` parameter annotation to tell the system that the function wants to consume the corresponding input data as a file. The system will download the data, write it to a local file and then pass the **path** of that file to the function.
-        Use the :py:class:`kfp.components.OutputPath` parameter annotation to tell the system that the function wants to produce the corresponding output data as a file. The system will prepare and pass the **path** of a file where the function should write the output data. After the function exits, the system will upload the data to the storage system so that it can be passed to downstream components.
+        Use the :py:class:`nkfp.components.InputPath` parameter annotation to tell the system that the function wants to consume the corresponding input data as a file. The system will download the data, write it to a local file and then pass the **path** of that file to the function.
+        Use the :py:class:`nkfp.components.OutputPath` parameter annotation to tell the system that the function wants to produce the corresponding output data as a file. The system will prepare and pass the **path** of a file where the function should write the output data. After the function exits, the system will upload the data to the storage system so that it can be passed to downstream components.
 
-        You can specify the type of the consumed/produced data by specifying the type argument to :py:class:`kfp.components.InputPath` and :py:class:`kfp.components.OutputPath`. The type can be a python type or an arbitrary type name string. :code:`OutputPath('CatBoostModel')` means that the function states that the data it has written to a file has type :code:`CatBoostModel`. :code:`InputPath('CatBoostModel')` means that the function states that it expect the data it reads from a file to have type 'CatBoostModel'. When the pipeline author connects inputs to outputs the system checks whether the types match.
+        You can specify the type of the consumed/produced data by specifying the type argument to :py:class:`nkfp.components.InputPath` and :py:class:`nkfp.components.OutputPath`. The type can be a python type or an arbitrary type name string. :code:`OutputPath('CatBoostModel')` means that the function states that the data it has written to a file has type :code:`CatBoostModel`. :code:`InputPath('CatBoostModel')` means that the function states that it expect the data it reads from a file to have type 'CatBoostModel'. When the pipeline author connects inputs to outputs the system checks whether the types match.
         Every kind of data can be consumed as a file input. Conversely, bigger data should not be consumed by value as all value inputs pass through the command line.
 
         Example of a component function declaring file input and output::

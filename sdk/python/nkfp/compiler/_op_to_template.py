@@ -20,9 +20,9 @@ import copy
 from collections import OrderedDict
 from typing import Union, List, Any, Callable, TypeVar, Dict
 
-from kfp.compiler._k8s_helper import convert_k8s_obj_to_json
-from kfp import dsl
-from kfp.dsl._container_op import BaseOp
+from nkfp.compiler._k8s_helper import convert_k8s_obj_to_json
+from nkfp import dsl
+from nkfp.dsl._container_op import BaseOp
 
 # generics
 T = TypeVar('T')

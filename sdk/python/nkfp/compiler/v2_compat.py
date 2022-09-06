@@ -16,10 +16,10 @@ import collections
 import json
 from typing import Optional
 
-from kfp import dsl
-from kfp.compiler import _default_transformers
+from nkfp import dsl
+from nkfp.compiler import _default_transformers
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.v2 import compiler
+from nkfp.v2 import compiler
 from kubernetes import client as k8s_client
 
 _DEFAULT_LAUNCHER_IMAGE = "gcr.io/ml-pipeline/kfp-launcher:1.8.7"

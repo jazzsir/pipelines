@@ -18,8 +18,8 @@ import json
 import re
 from typing import Dict, List, Optional, Union
 
-from kfp.v2.components import utils
-from kfp.v2.components.types import type_utils
+from nkfp.v2.components import utils
+from nkfp.v2.components.types import type_utils
 
 
 @dataclasses.dataclass
@@ -131,7 +131,7 @@ class PipelineChannel(abc.ABC):
         We make repr return the placeholder string so that if someone
         uses str()-based serialization of complex objects containing
         `PipelineChannel`, it works properly. (e.g. str([1, 2, 3,
-        kfp.v2.dsl.PipelineParameterChannel("aaa"), 4, 5, 6,]))
+        nkfp.v2.dsl.PipelineParameterChannel("aaa"), 4, 5, 6,]))
         """
         return str(self)
 

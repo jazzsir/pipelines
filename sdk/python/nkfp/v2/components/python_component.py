@@ -15,8 +15,8 @@
 
 from typing import Callable
 
-from kfp.v2.components import base_component
-from kfp.v2.components import structures
+from nkfp.v2.components import base_component
+from nkfp.v2.components import structures
 
 
 class PythonComponent(base_component.BaseComponent):

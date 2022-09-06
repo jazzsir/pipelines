@@ -10,7 +10,7 @@ outputs:
 implementation:
   container:
     image: gcr.io/my-project/my-image:123456
-    command: [python, -m, kfp.containers.entrypoint]
+    command: [python, -m, nkfp.containers.entrypoint]
     args:
     - --executor_input_str
     - {executorInput: null}

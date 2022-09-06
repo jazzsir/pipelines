@@ -19,19 +19,19 @@ import json
 import pathlib
 from typing import Any, Mapping, Optional
 
-import kfp
-from kfp.components import _structures, _data_passing
-from kfp.components import _components
-from kfp.components import _naming
-from kfp import dsl
-from kfp.dsl import _container_op
-from kfp.dsl import _for_loop
-from kfp.dsl import _pipeline_param
-from kfp.dsl import component_spec as dsl_component_spec
-from kfp.dsl import dsl_utils
-from kfp.dsl import types
+import nkfp
+from nkfp.components import _structures, _data_passing
+from nkfp.components import _components
+from nkfp.components import _naming
+from nkfp import dsl
+from nkfp.dsl import _container_op
+from nkfp.dsl import _for_loop
+from nkfp.dsl import _pipeline_param
+from nkfp.dsl import component_spec as dsl_component_spec
+from nkfp.dsl import dsl_utils
+from nkfp.dsl import types
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.v2.components.types import type_utils
+from nkfp.v2.components.types import type_utils
 
 # Placeholder to represent the output directory hosting all the generated URIs.
 # Its actual value will be specified during pipeline compilation.
@@ -42,12 +42,12 @@ from kfp.v2.components.types import type_utils
 OUTPUT_DIR_PLACEHOLDER = '{{pipelineparam:op=;name=pipeline-root}}'
 # Placeholder to represent to UID of the current pipeline at runtime.
 # Will be replaced by engine-specific placeholder during compilation.
-RUN_ID_PLACEHOLDER = '{{kfp.run_uid}}'
+RUN_ID_PLACEHOLDER = '{{nkfp.run_uid}}'
 # Format of the Argo parameter used to pass the producer's Pod ID to
 # the consumer.
 PRODUCER_POD_NAME_PARAMETER = '{}-producer-pod-id-'
 # Format of the input output port name placeholder.
-INPUT_OUTPUT_NAME_PATTERN = '{{{{kfp.input-output-name.{}}}}}'
+INPUT_OUTPUT_NAME_PATTERN = '{{{{nkfp.input-output-name.{}}}}}'
 # Fixed name for per-task output metadata json file.
 OUTPUT_METADATA_JSON = '/tmp/outputs/executor_output.json'
 # Executor input placeholder.
@@ -200,7 +200,7 @@ def _create_container_op_from_component_and_arguments(
             elif input_spec.type == 'Float':
                 default_value = float(default_value)
             elif (type_utils.is_parameter_type(input_spec.type) and
-                  kfp.COMPILING_FOR_V2):
+                  nkfp.COMPILING_FOR_V2):
                 parameter_type = type_utils.get_parameter_type(input_spec.type)
                 default_value = type_utils.deserialize_parameter_value(
                     value=default_value, parameter_type=parameter_type)
@@ -276,7 +276,7 @@ def _create_container_op_from_component_and_arguments(
             } for input in component_meta.inputs
         }
 
-    if kfp.COMPILING_FOR_V2:
+    if nkfp.COMPILING_FOR_V2:
         for name, spec_type in name_to_spec_type.items():
             if (name in original_arguments and
                     type_utils.is_parameter_type(spec_type['type'])):
@@ -382,7 +382,7 @@ def _attach_v2_specs(
         }
 
         def _input_artifact_uri_placeholder(input_key: str) -> str:
-            if kfp.COMPILING_FOR_V2 and type_utils.is_parameter_type(
+            if nkfp.COMPILING_FOR_V2 and type_utils.is_parameter_type(
                     inputs_dict[input_key].type):
                 raise TypeError(
                     'Input "{}" with type "{}" cannot be paired with '
@@ -392,7 +392,7 @@ def _attach_v2_specs(
                 return _generate_input_uri_placeholder(input_key)
 
         def _input_artifact_path_placeholder(input_key: str) -> str:
-            if kfp.COMPILING_FOR_V2 and type_utils.is_parameter_type(
+            if nkfp.COMPILING_FOR_V2 and type_utils.is_parameter_type(
                     inputs_dict[input_key].type):
                 raise TypeError(
                     'Input "{}" with type "{}" cannot be paired with '
@@ -402,7 +402,7 @@ def _attach_v2_specs(
                 return "{{{{$.inputs.artifacts['{}'].path}}}}".format(input_key)
 
         def _input_parameter_placeholder(input_key: str) -> str:
-            if kfp.COMPILING_FOR_V2 and not type_utils.is_parameter_type(
+            if nkfp.COMPILING_FOR_V2 and not type_utils.is_parameter_type(
                     inputs_dict[input_key].type):
                 raise TypeError(
                     'Input "{}" with type "{}" cannot be paired with '
@@ -412,7 +412,7 @@ def _attach_v2_specs(
                 return "{{{{$.inputs.parameters['{}']}}}}".format(input_key)
 
         def _output_artifact_uri_placeholder(output_key: str) -> str:
-            if kfp.COMPILING_FOR_V2 and type_utils.is_parameter_type(
+            if nkfp.COMPILING_FOR_V2 and type_utils.is_parameter_type(
                     outputs_dict[output_key].type):
                 raise TypeError(
                     'Output "{}" with type "{}" cannot be paired with '
@@ -548,7 +548,7 @@ def _attach_v2_specs(
             argument_type = 'String'
             pipeline_params = _pipeline_param.extract_pipelineparams_from_any(
                 argument_value)
-            if pipeline_params and kfp.COMPILING_FOR_V2:
+            if pipeline_params and nkfp.COMPILING_FOR_V2:
                 # argument_value contains PipelineParam placeholders which needs to be
                 # replaced. And the input needs to be added to the task spec.
                 for param in pipeline_params:
@@ -622,7 +622,7 @@ def _attach_v2_specs(
                 f'ContainerOp object {input_name} was passed to component as an '
                 'input argument. Pass a single output instead.')
         else:
-            if kfp.COMPILING_FOR_V2:
+            if nkfp.COMPILING_FOR_V2:
                 raise NotImplementedError(
                     'Input argument supports only the following types: '
                     'PipelineParam, str, int, float, bool, dict, and list. Got: '
@@ -630,7 +630,7 @@ def _attach_v2_specs(
 
         argument_is_parameter_type = type_utils.is_parameter_type(argument_type)
         input_is_parameter_type = type_utils.is_parameter_type(input_type)
-        if kfp.COMPILING_FOR_V2 and (argument_is_parameter_type !=
+        if nkfp.COMPILING_FOR_V2 and (argument_is_parameter_type !=
                                      input_is_parameter_type):
             if isinstance(argument_value, dsl.PipelineParam):
                 param_or_value_msg = 'PipelineParam "{}"'.format(
@@ -684,7 +684,7 @@ def _attach_v2_specs(
     task.task_spec = pipeline_task_spec
 
     # Override command and arguments if compiling to v2.
-    if kfp.COMPILING_FOR_V2:
+    if nkfp.COMPILING_FOR_V2:
         task.command = resolved_cmd.command
         task.arguments = resolved_cmd.args
 

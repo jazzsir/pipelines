@@ -17,8 +17,8 @@
 from typing import Text
 import unittest
 from unittest import mock
-from kfp.cli.diagnose_me import kubernetes_cluster as dkc
-from kfp.cli.diagnose_me import utility
+from nkfp.cli.diagnose_me import kubernetes_cluster as dkc
+from nkfp.cli.diagnose_me import utility
 
 
 class KubernetesClusterTest(unittest.TestCase):

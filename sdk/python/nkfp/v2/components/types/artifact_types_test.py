@@ -11,13 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.v2.components.types.artifact_types."""
+"""Tests for nkfp.v2.components.types.artifact_types."""
 
 import unittest
 import json
 import os
 
-from kfp.v2.components.types import artifact_types
+from nkfp.v2.components.types import artifact_types
 
 
 class ArtifactsTest(unittest.TestCase):

@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.components.executor."""
+"""Tests for nkfp.components.executor."""
 
 import json
 import os
@@ -19,11 +19,11 @@ import tempfile
 import unittest
 from typing import Callable, Dict, List, NamedTuple, Optional
 
-from kfp.v2.components import executor
-from kfp.v2.components.types import artifact_types
-from kfp.v2.components.types.artifact_types import (Artifact, Dataset, Metrics,
+from nkfp.v2.components import executor
+from nkfp.v2.components.types import artifact_types
+from nkfp.v2.components.types.artifact_types import (Artifact, Dataset, Metrics,
                                                     Model)
-from kfp.v2.components.types.type_annotations import (Input, InputPath, Output,
+from nkfp.v2.components.types.type_annotations import (Input, InputPath, Output,
                                                       OutputPath)
 
 _EXECUTOR_INPUT = """\

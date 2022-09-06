@@ -17,7 +17,7 @@ from deprecated.sphinx import deprecated
 from ._pipeline_param import PipelineParam
 from .types import check_types, InconsistentTypeException
 from ._ops_group import Graph
-import kfp
+import nkfp
 
 
 @deprecated(
@@ -88,7 +88,7 @@ def component(func):
     def _component(*args, **kargs):
         from ..components._python_op import _extract_component_interface
         component_meta = _extract_component_interface(func)
-        if kfp.TYPE_CHECK:
+        if nkfp.TYPE_CHECK:
             arg_index = 0
             for arg in args:
                 if isinstance(arg, PipelineParam) and not check_types(
@@ -132,7 +132,7 @@ def graph_component(func):
 
         # Warning: caching is tricky when recursion is involved. Please be careful
         # and set proper max_cache_staleness in case of infinite loop.
-        import kfp.dsl as dsl
+        import nkfp.dsl as dsl
         @dsl.graph_component
         def flip_component(flip_result):
           print_flip = PrintOp(flip_result)

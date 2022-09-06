@@ -23,20 +23,20 @@ import warnings
 import zipfile
 from typing import Callable, Set, List, Text, Dict, Tuple, Any, Union, Optional
 
-import kfp
-from kfp.dsl import _for_loop
-from kfp.compiler import _data_passing_rewriter, v2_compat
+import nkfp
+from nkfp.dsl import _for_loop
+from nkfp.compiler import _data_passing_rewriter, v2_compat
 
-from kfp import dsl
-from kfp.compiler._k8s_helper import convert_k8s_obj_to_json, sanitize_k8s_name
-from kfp.compiler._op_to_template import _op_to_template, _process_obj
-from kfp.compiler._default_transformers import add_pod_env, add_pod_labels
+from nkfp import dsl
+from nkfp.compiler._k8s_helper import convert_k8s_obj_to_json, sanitize_k8s_name
+from nkfp.compiler._op_to_template import _op_to_template, _process_obj
+from nkfp.compiler._default_transformers import add_pod_env, add_pod_labels
 
-from kfp.components.structures import InputSpec
-from kfp.components._yaml_utils import dump_yaml
-from kfp.dsl._metadata import _extract_pipeline_metadata
-from kfp.dsl._ops_group import OpsGroup
-from kfp.dsl._pipeline_param import extract_pipelineparams_from_any, PipelineParam
+from nkfp.components.structures import InputSpec
+from nkfp.components._yaml_utils import dump_yaml
+from nkfp.dsl._metadata import _extract_pipeline_metadata
+from nkfp.dsl._ops_group import OpsGroup
+from nkfp.dsl._pipeline_param import extract_pipelineparams_from_any, PipelineParam
 
 _SDK_VERSION_LABEL = 'pipelines.kubeflow.org/kfp_sdk_version'
 _SDK_ENV_LABEL = 'pipelines.kubeflow.org/pipeline-sdk-type'
@@ -60,14 +60,14 @@ class Compiler(object):
     """
 
     def __init__(self,
-                 mode: dsl.PipelineExecutionMode = kfp.dsl.PipelineExecutionMode
+                 mode: dsl.PipelineExecutionMode = nkfp.dsl.PipelineExecutionMode
                  .V1_LEGACY,
                  launcher_image: Optional[str] = None):
         """Creates a KFP compiler for compiling pipeline functions for
         execution.
 
         Args:
-          mode: The pipeline execution mode to use, defaults to kfp.dsl.PipelineExecutionMode.V1_LEGACY.
+          mode: The pipeline execution mode to use, defaults to nkfp.dsl.PipelineExecutionMode.V1_LEGACY.
           launcher_image: Configurable image for KFP launcher to use. Only applies
             when `mode == dsl.PipelineExecutionMode.V2_COMPATIBLE`. Should only be
             needed for tests or custom deployments right now.
@@ -1034,7 +1034,7 @@ class Compiler(object):
 
         op_transformers = [add_pod_env]
         pod_labels = {
-            _SDK_VERSION_LABEL: kfp.__version__,
+            _SDK_VERSION_LABEL: nkfp.__version__,
             _SDK_ENV_LABEL: _SDK_ENV_DEFAULT
         }
         op_transformers.append(add_pod_labels(pod_labels))
@@ -1074,7 +1074,7 @@ class Compiler(object):
         annotations = metadata.setdefault('annotations', {})
         labels = metadata.setdefault('labels', {})
 
-        annotations[_SDK_VERSION_LABEL] = kfp.__version__
+        annotations[_SDK_VERSION_LABEL] = nkfp.__version__
         annotations[
             'pipelines.kubeflow.org/pipeline_compilation_time'] = datetime.datetime.now(
             ).isoformat()
@@ -1086,7 +1086,7 @@ class Compiler(object):
             labels['pipelines.kubeflow.org/v2_pipeline'] = "true"
 
         # Labels might be logged better than annotations so adding some information here as well
-        labels[_SDK_VERSION_LABEL] = kfp.__version__
+        labels[_SDK_VERSION_LABEL] = nkfp.__version__
 
         return workflow
 
@@ -1164,23 +1164,23 @@ class Compiler(object):
             self._pipeline_name_param = dsl.PipelineParam(
                 name='pipeline-name', value=f'pipeline/{pipeline_name}')
 
-        import kfp
-        type_check_old_value = kfp.TYPE_CHECK
-        compiling_for_v2_old_value = kfp.COMPILING_FOR_V2
-        kfp.COMPILING_FOR_V2 = self._mode in [
+        import nkfp
+        type_check_old_value = nkfp.TYPE_CHECK
+        compiling_for_v2_old_value = nkfp.COMPILING_FOR_V2
+        nkfp.COMPILING_FOR_V2 = self._mode in [
             dsl.PipelineExecutionMode.V2_COMPATIBLE,
             dsl.PipelineExecutionMode.V2_ENGINE,
         ]
 
         try:
-            kfp.TYPE_CHECK = type_check
+            nkfp.TYPE_CHECK = type_check
             self._create_and_write_workflow(
                 pipeline_func=pipeline_func,
                 pipeline_conf=pipeline_conf,
                 package_path=package_path)
         finally:
-            kfp.TYPE_CHECK = type_check_old_value
-            kfp.COMPILING_FOR_V2 = compiling_for_v2_old_value
+            nkfp.TYPE_CHECK = type_check_old_value
+            nkfp.COMPILING_FOR_V2 = compiling_for_v2_old_value
 
     @staticmethod
     def _write_workflow(workflow: Dict[Text, Any], package_path: Text = None):

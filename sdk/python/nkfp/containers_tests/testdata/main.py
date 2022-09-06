@@ -13,9 +13,9 @@
 # limitations under the License.
 """User module under test."""
 from typing import NamedTuple
-from kfp import components
-from kfp.dsl import artifact
-from kfp.dsl import ontology_artifacts
+from nkfp import components
+from nkfp.dsl import artifact
+from nkfp.dsl import ontology_artifacts
 
 
 def test_func(

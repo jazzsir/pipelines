@@ -23,7 +23,7 @@ import inspect
 from typing import Any, Callable, NamedTuple, Optional, Sequence, Type
 import warnings
 
-from kfp.components import type_annotation_utils
+from nkfp.components import type_annotation_utils
 
 Converter = NamedTuple('Converter', [
     ('types', Sequence[Type]),

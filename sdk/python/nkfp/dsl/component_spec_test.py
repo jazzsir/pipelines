@@ -11,13 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.dsl.component_spec."""
+"""Tests for nkfp.dsl.component_spec."""
 
 from absl.testing import parameterized
 
-from kfp.components import _structures as structures
-from kfp.dsl import _pipeline_param
-from kfp.dsl import component_spec as dsl_component_spec
+from nkfp.components import _structures as structures
+from nkfp.dsl import _pipeline_param
+from nkfp.dsl import component_spec as dsl_component_spec
 from kfp.pipeline_spec import pipeline_spec_pb2
 
 from google.protobuf import json_format

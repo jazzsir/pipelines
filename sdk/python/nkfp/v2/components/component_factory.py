@@ -22,11 +22,11 @@ import warnings
 
 import docstring_parser
 
-from kfp.v2.components import placeholders
-from kfp.v2.components import python_component
-from kfp.v2.components import structures
-from kfp.v2.components.types import artifact_types, type_annotations
-from kfp.v2.components.types import type_utils
+from nkfp.v2.components import placeholders
+from nkfp.v2.components import python_component
+from nkfp.v2.components import structures
+from nkfp.v2.components.types import artifact_types, type_annotations
+from nkfp.v2.components.types import type_utils
 
 _DEFAULT_BASE_IMAGE = 'python:3.7'
 
@@ -81,8 +81,8 @@ def _get_packages_to_install_command(
 
 
 def _get_default_kfp_package_path() -> str:
-    import kfp
-    return 'kfp=={}'.format(kfp.__version__)
+    import nkfp
+    return 'kfp=={}'.format(nkfp.__version__)
 
 
 def _get_function_source_definition(func: Callable) -> str:
@@ -308,9 +308,9 @@ def extract_component_interface(func: Callable) -> structures.ComponentSpec:
 def _get_command_and_args_for_lightweight_component(
         func: Callable) -> Tuple[List[str], List[str]]:
     imports_source = [
-        "import kfp",
-        "from kfp.v2 import dsl",
-        "from kfp.v2.dsl import *",
+        "import nkfp",
+        "from nkfp.v2 import dsl",
+        "from nkfp.v2.dsl import *",
         "from typing import *",
     ]
 
@@ -326,7 +326,7 @@ def _get_command_and_args_for_lightweight_component(
         textwrap.dedent('''\
                     program_path=$(mktemp -d)
                     printf "%s" "$0" > "$program_path/ephemeral_component.py"
-                    python3 -m kfp.v2.components.executor_main \
+                    python3 -m nkfp.v2.components.executor_main \
                         --component_module_path \
                         "$program_path/ephemeral_component.py" \
                         "$@"
@@ -349,7 +349,7 @@ def _get_command_and_args_for_containerized_component(
     command = [
         'python3',
         '-m',
-        'kfp.v2.components.executor_main',
+        'nkfp.v2.components.executor_main',
     ]
 
     args = [

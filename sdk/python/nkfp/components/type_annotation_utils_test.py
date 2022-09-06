@@ -11,13 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for kfp.components.type_annoation_utils."""
+"""Tests for nkfp.components.type_annoation_utils."""
 
 import unittest
 from absl.testing import parameterized
 from typing import Any, Dict, List, Optional
 
-from kfp.components import type_annotation_utils
+from nkfp.components import type_annotation_utils
 
 
 class TypeAnnotationUtilsTest(parameterized.TestCase):

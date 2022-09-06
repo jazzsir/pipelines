@@ -2,7 +2,7 @@ import click
 import json
 from typing import List
 
-from kfp.cli.output import print_output, OutputFormat
+from nkfp.cli.output import print_output, OutputFormat
 import kfp_server_api
 from kfp_server_api.models.api_experiment import ApiExperiment
 

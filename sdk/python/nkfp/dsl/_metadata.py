@@ -23,7 +23,7 @@ def _annotation_to_typemeta(annotation):
 
     Args:
       annotation(BaseType/str/dict): input/output annotations
-        BaseType: registered in kfp.dsl.types
+        BaseType: registered in nkfp.dsl.types
         str: either a string of a dict serialization or a string of the type name
         dict: type name and properties. note that the properties values can be
           dict.
@@ -72,7 +72,7 @@ def _extract_pipeline_metadata(func):
         arg_default = arg_defaults[arg] if arg in arg_defaults else None
         if isinstance(arg_default, PipelineParam):
             warnings.warn(
-                'Explicit creation of `kfp.dsl.PipelineParam`s by the users is '
+                'Explicit creation of `nkfp.dsl.PipelineParam`s by the users is '
                 'deprecated. The users should define the parameter type and default '
                 'values using standard pythonic constructs: '
                 'def my_func(a: int = 1, b: str = "default"):')
@@ -93,6 +93,6 @@ def _extract_pipeline_metadata(func):
             # Only validating non-serialized values
             validate(instance=arg_default, schema=schema_object)
 
-    from kfp.components._python_op import _extract_component_interface
+    from nkfp.components._python_op import _extract_component_interface
     component_spec = _extract_component_interface(func)
     return component_spec

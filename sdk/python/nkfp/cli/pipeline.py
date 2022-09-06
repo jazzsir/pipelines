@@ -14,10 +14,10 @@
 import click
 import json
 from typing import List, Optional
-from kfp._client import Client
+from nkfp._client import Client
 
 import kfp_server_api
-from kfp.cli.output import print_output, OutputFormat
+from nkfp.cli.output import print_output, OutputFormat
 
 
 @click.group()

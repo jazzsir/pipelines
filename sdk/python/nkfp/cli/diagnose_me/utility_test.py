@@ -15,7 +15,7 @@
 """Tests for diagnose_me.utility."""
 
 import unittest
-from kfp.cli.diagnose_me import utility
+from nkfp.cli.diagnose_me import utility
 
 
 class UtilityTest(unittest.TestCase):

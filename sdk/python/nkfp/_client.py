@@ -28,11 +28,11 @@ from typing import Mapping, Callable, Optional
 
 import kfp_server_api
 
-from kfp import dsl
-from kfp.compiler import compiler
-from kfp.compiler._k8s_helper import sanitize_k8s_name
+from nkfp import dsl
+from nkfp.compiler import compiler
+from nkfp.compiler._k8s_helper import sanitize_k8s_name
 
-from kfp._auth import get_auth_token, get_gcp_access_token
+from nkfp._auth import get_auth_token, get_gcp_access_token
 from kfp_server_api import ApiException
 
 # Operators on scalar values. Only applies to one of |int_value|,
@@ -233,7 +233,7 @@ class Client(object):
         #     access_token = r.json()['access_token']
         #     return access_token
         #
-        # client = kfp.Client(host='<KFPHost>', existing_token=get_access_token())
+        # client = nkfp.Client(host='<KFPHost>', existing_token=get_access_token())
         #
         if existing_token:
             token = existing_token
@@ -345,7 +345,7 @@ class Client(object):
         # implement more and more credentials, we can have some heuristic and
         # choose from a number of options.
         # See https://github.com/kubeflow/pipelines/pull/5287#issuecomment-805654121
-        from kfp import auth
+        from nkfp import auth
         credentials = auth.ServiceAccountTokenVolumeCredentials()
         config_copy = copy.deepcopy(config)
 

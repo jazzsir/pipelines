@@ -19,10 +19,10 @@ import tempfile
 import unittest
 
 from absl.testing import parameterized
-from kfp.v2 import components
-from kfp.v2 import compiler
-from kfp.v2 import dsl
-from kfp.v2.components.types import type_utils
+from nkfp.v2 import components
+from nkfp.v2 import compiler
+from nkfp.v2 import dsl
+from nkfp.v2.components.types import type_utils
 
 VALID_PRODUCER_COMPONENT_SAMPLE = components.load_component_from_text("""
     name: producer
@@ -126,7 +126,7 @@ class CompilerTest(parameterized.TestCase):
 
         with self.assertRaisesRegex(
                 AttributeError,
-                "module 'kfp.v2.dsl' has no attribute 'graph_component'"):
+                "module 'nkfp.v2.dsl' has no attribute 'graph_component'"):
 
             @dsl.graph_component
             def flip_coin_graph_component():

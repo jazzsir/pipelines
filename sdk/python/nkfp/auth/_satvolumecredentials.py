@@ -17,7 +17,7 @@ import logging
 
 from kubernetes.client import configuration
 
-from kfp import auth
+from nkfp import auth
 
 
 class ServiceAccountTokenVolumeCredentials(auth.TokenCredentialsBase):

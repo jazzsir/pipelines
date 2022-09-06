@@ -240,7 +240,7 @@ class ComponentStore:
 
         Example::
 
-            kfp.components.ComponentStore.default_store.search('xgboost')
+            nkfp.components.ComponentStore.default_store.search('xgboost')
 
             # Returns results:
             #     Xgboost train   https://raw.githubusercontent.com/.../components/XGBoost/Train/component.yaml

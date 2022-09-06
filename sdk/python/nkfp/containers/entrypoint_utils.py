@@ -18,10 +18,10 @@ import sys
 from typing import Callable, Dict, Optional, Union
 from google.protobuf import json_format
 
-from kfp.components import _python_op
-from kfp.containers import _gcs_helper
+from nkfp.components import _python_op
+from nkfp.containers import _gcs_helper
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.dsl import artifact
+from nkfp.dsl import artifact
 
 # If path starts with one of those, consider files are in remote filesystem.
 _REMOTE_FS_PREFIX = ['gs://', 'hdfs://', 's3://']

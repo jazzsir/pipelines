@@ -17,9 +17,9 @@ import logging
 import os
 import sys
 
-from kfp.v2.components import executor as component_executor
-from kfp.v2.components import kfp_config
-from kfp.v2.components import utils
+from nkfp.v2.components import executor as component_executor
+from nkfp.v2.components import kfp_config
+from nkfp.v2.components import utils
 
 
 def _setup_logging():

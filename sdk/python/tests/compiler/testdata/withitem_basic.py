@@ -43,7 +43,7 @@ def pipeline(my_pipe_param: int = 10):
 
 
 if __name__ == '__main__':
-    from kfp import compiler
+    from nkfp import compiler
     print(compiler.Compiler().compile(pipeline, package_path=None))
 
     import kfp

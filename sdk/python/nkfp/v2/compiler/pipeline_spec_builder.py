@@ -18,14 +18,14 @@ from typing import List, Mapping, Optional, Tuple, Union
 
 from google.protobuf import struct_pb2
 from kfp.pipeline_spec import pipeline_spec_pb2
-from kfp.v2.components import utils as component_utils
-from kfp.v2.components import for_loop
-from kfp.v2.components import pipeline_channel
-from kfp.v2.components import pipeline_task
-from kfp.v2.components import placeholders
-from kfp.v2.components import tasks_group
-from kfp.v2.components.types import artifact_types
-from kfp.v2.components.types import type_utils
+from nkfp.v2.components import utils as component_utils
+from nkfp.v2.components import for_loop
+from nkfp.v2.components import pipeline_channel
+from nkfp.v2.components import pipeline_task
+from nkfp.v2.components import placeholders
+from nkfp.v2.components import tasks_group
+from nkfp.v2.components.types import artifact_types
+from nkfp.v2.components.types import type_utils
 
 _GroupOrTask = Union[tasks_group.TasksGroup, pipeline_task.PipelineTask]
 

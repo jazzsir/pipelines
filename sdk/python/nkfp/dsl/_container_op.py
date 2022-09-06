@@ -17,9 +17,9 @@ import warnings
 from typing import (Any, Callable, Dict, List, Optional, Sequence, Tuple,
                     TypeVar, Union)
 
-import kfp
-from kfp.components import _components, _structures
-from kfp.dsl import _pipeline_param, dsl_utils
+import nkfp
+from nkfp.components import _components, _structures
+from nkfp.dsl import _pipeline_param, dsl_utils
 from kfp.pipeline_spec import pipeline_spec_pb2
 from kubernetes.client import V1Affinity, V1Toleration
 from kubernetes.client.models import (V1Container, V1ContainerPort,
@@ -150,7 +150,7 @@ class Container(V1Container):
 
     Example::
 
-      from kfp.dsl import ContainerOp
+      from nkfp.dsl import ContainerOp
       from kubernetes.client.models import V1EnvVar
 
 
@@ -466,7 +466,7 @@ class Container(V1Container):
           value: The value of the environment variable.
         """
 
-        if not kfp.COMPILING_FOR_V2:
+        if not nkfp.COMPILING_FOR_V2:
             raise ValueError(
                 'set_env_variable is v2 only. Use add_env_variable for v1.')
 
@@ -713,7 +713,7 @@ class UserContainer(Container):
 
     Example ::
 
-      from kfp.dsl import ContainerOp, UserContainer
+      from nkfp.dsl import ContainerOp, UserContainer
       # creates a `ContainerOp` and adds a redis init container
       op = (ContainerOp(name='foo-op', image='busybox:latest')
          .add_initContainer(UserContainer(name='redis', image='redis:alpine')))
@@ -915,7 +915,7 @@ class BaseOp(object):
 
         Example::
 
-          from kfp.gcp import use_gcp_secret
+          from nkfp.gcp import use_gcp_secret
           task = (
               train_op(...)
                   .set_memory_request('1G')
@@ -1164,7 +1164,7 @@ class ContainerOp(BaseOp):
 
     Example::
 
-      from kfp import dsl
+      from nkfp import dsl
       from kubernetes.client.models import V1EnvVar, V1SecretKeySelector
       @dsl.pipeline(
           name='foo',
@@ -1258,12 +1258,12 @@ class ContainerOp(BaseOp):
                 'Please create reusable components instead of constructing ContainerOp instances directly.'
                 ' Reusable components are shareable, portable and have compatibility and support guarantees.'
                 ' Please see the documentation: https://www.kubeflow.org/docs/pipelines/sdk/component-development/#writing-your-component-definition-file'
-                ' The components can be created manually (or, in case of python, using kfp.components.create_component_from_func or func_to_container_op)'
-                ' and then loaded using kfp.components.load_component_from_file, load_component_from_uri or load_component_from_text: '
-                'https://kubeflow-pipelines.readthedocs.io/en/stable/source/kfp.components.html#kfp.components.load_component_from_file',
+                ' The components can be created manually (or, in case of python, using nkfp.components.create_component_from_func or func_to_container_op)'
+                ' and then loaded using nkfp.components.load_component_from_file, load_component_from_uri or load_component_from_text: '
+                'https://kubeflow-pipelines.readthedocs.io/en/stable/source/nkfp.components.html#nkfp.components.load_component_from_file',
                 category=FutureWarning,
             )
-            if kfp.COMPILING_FOR_V2:
+            if nkfp.COMPILING_FOR_V2:
                 raise RuntimeError(
                     'Constructing ContainerOp instances directly is deprecated and not '
                     'supported when compiling to v2 (using v2 compiler or v1 compiler '
@@ -1310,7 +1310,7 @@ class ContainerOp(BaseOp):
                 'outputting big data.', DeprecationWarning)
 
         # Skip the special handling that is unnecessary in v2.
-        if not kfp.COMPILING_FOR_V2:
+        if not nkfp.COMPILING_FOR_V2:
             # Special handling for the mlpipeline-ui-metadata and mlpipeline-metrics
             # outputs that should always be saved as artifacts
             # TODO: Remove when outputs are always saved as artifacts
@@ -1401,7 +1401,7 @@ class ContainerOp(BaseOp):
 
         Example::
 
-          import kfp.dsl as dsl
+          import nkfp.dsl as dsl
           from kubernetes.client.models import V1EnvVar
 
           @dsl.pipeline(name='example_pipeline')
@@ -1451,7 +1451,7 @@ class ContainerOp(BaseOp):
                         output.name)
                 self.file_outputs[output.name] = output_filename
 
-            if not kfp.COMPILING_FOR_V2:
+            if not nkfp.COMPILING_FOR_V2:
                 for output_name, path in dict(self.file_outputs).items():
                     is_legacy_name, normalized_name = _is_legacy_output_name(
                         output_name)

@@ -44,9 +44,9 @@ def run_pipeline_func_on_cluster(
       arguments: Arguments to the pipeline function provided as a dict.
       run_name: Optional. Name of the run to be shown in the UI.
       experiment_name: Optional. Name of the experiment to add the run to.
-      kfp_client: Optional. An instance of kfp.Client configured for the desired
+      kfp_client: Optional. An instance of nkfp.Client configured for the desired
         KFP cluster.
-      pipeline_conf: Optional. kfp.dsl.PipelineConf instance. Can specify op
+      pipeline_conf: Optional. nkfp.dsl.PipelineConf instance. Can specify op
         transforms, image pull secrets and other pipeline-level configuration
         options.
     """
@@ -83,8 +83,8 @@ def run_pipeline_func_locally(
       pipeline_func: A function that describes a pipeline by calling components
         and composing them into execution graph.
       arguments: Arguments to the pipeline function provided as a dict.
-        reference to `kfp.client.create_run_from_pipeline_func`.
-      local_client: Optional. An instance of kfp.LocalClient.
+        reference to `nkfp.client.create_run_from_pipeline_func`.
+      local_client: Optional. An instance of nkfp.LocalClient.
       pipeline_root: Optional. The root directory where the output artifact of component
         will be saved.
       execution_mode: Configuration to decide whether the client executes component

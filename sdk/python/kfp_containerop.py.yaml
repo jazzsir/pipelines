@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-2-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.7.0, pipelines.kubeflow.org/pipeline_compilation_time: '2022-09-06T15:31:16.147620',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "print text", "name": "hello
+      world"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.7.0}
+spec:
+  entrypoint: hello-world-2
+  templates:
+  - name: hello-world
+    container:
+      args: [echo hello world]
+      command: [sh, -c]
+      image: alpine
+      imagePullPolicy: Always
+    metadata:
+      annotations: {scheduling.clops.clova.ai/machine-type: pipe-cpu-half-v1}
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.7.0
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  - name: hello-world-2
+    dag:
+      tasks:
+      - {name: hello-world, template: hello-world}
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner
+  ttlSecondsAfterFinished: 10
