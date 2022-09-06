@@ -85,3 +85,7 @@ __pycache__
 # Coverage
 .coverage
 .coverage*
+
+# dev
+cscope.*
+tags
