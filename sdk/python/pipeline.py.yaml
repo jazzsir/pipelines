@@ -1,0 +1,294 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: pipeline-v2-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.10, pipelines.kubeflow.org/pipeline_compilation_time: '2022-09-06T20:55:10.186832',
+    pipelines.kubeflow.org/pipeline_spec: '{"name": "pipeline-v2"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.10}
+spec:
+  entrypoint: pipeline-v2
+  templates:
+  - name: eval-model
+    container:
+      args: [--executor_input, '{{$}}', --function_to_execute, eval_model]
+      command:
+      - sh
+      - -c
+      - |2
+
+        if ! [ -x "$(command -v pip)" ]; then
+            python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip
+        fi
+
+        PIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'pandas' 'sklearn' 'xgboost' 'kfp==1.8.10' && "$0" "$@"
+      - sh
+      - -ec
+      - |
+        program_path=$(mktemp -d)
+        printf "%s" "$0" > "$program_path/ephemeral_component.py"
+        python3 -m kfp.v2.components.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+      - |2+
+
+        import kfp
+        from kfp.v2 import dsl
+        from kfp.v2.dsl import *
+        from typing import *
+
+        def eval_model(
+            test_set: Input[Dataset],
+            xgb_model: Input[Model],
+            metrics: Output[ClassificationMetrics],
+            smetrics: Output[Metrics]
+        ):
+            from xgboost import XGBClassifier
+            import pandas as pd
+
+            data = pd.read_csv(test_set.path)
+            model = XGBClassifier()
+            model.load_model(xgb_model.path)
+
+            score = model.score(
+                data.drop(columns=["target"]),
+                data.target,
+            )
+
+            from sklearn.metrics import roc_curve
+            y_scores =  model.predict_proba(data.drop(columns=["target"]))[:, 1]
+            fpr, tpr, thresholds = roc_curve(
+                 y_true=data.target.to_numpy(), y_score=y_scores, pos_label=True
+            )
+            metrics.log_roc_curve(fpr.tolist(), tpr.tolist(), thresholds.tolist())
+
+            from sklearn.metrics import confusion_matrix
+            y_pred = model.predict(data.drop(columns=["target"]))
+
+            metrics.log_confusion_matrix(
+               ["False", "True"],
+               confusion_matrix(
+                   data.target, y_pred
+               ).tolist(),  # .tolist() to convert np array to list.
+            )
+
+            xgb_model.metadata["test_score"] = float(score)
+            smetrics.log_metric("score", float(score))
+
+      image: python:3.7
+      imagePullPolicy: Always
+    inputs:
+      artifacts:
+      - {name: get-data-dataset_test, path: /tmp/inputs/test_set/data}
+      - {name: train-xgb-model-model_artifact, path: /tmp/inputs/xgb_model/data}
+    outputs:
+      artifacts:
+      - {name: eval-model-metrics, path: /tmp/outputs/metrics/data}
+      - {name: eval-model-smetrics, path: /tmp/outputs/smetrics/data}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.10
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
+          {"args": ["--executor_input", {"executorInput": null}, "--function_to_execute",
+          "eval_model"], "command": ["sh", "-c", "\nif ! [ -x \"$(command -v pip)\"
+          ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get
+          install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip
+          install --quiet     --no-warn-script-location ''pandas'' ''sklearn'' ''xgboost''
+          ''kfp==1.8.10'' && \"$0\" \"$@\"\n", "sh", "-ec", "program_path=$(mktemp
+          -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3
+          -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+          "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing
+          import *\n\ndef eval_model(\n    test_set: Input[Dataset],\n    xgb_model:
+          Input[Model],\n    metrics: Output[ClassificationMetrics],\n    smetrics:
+          Output[Metrics]\n):\n    from xgboost import XGBClassifier\n    import pandas
+          as pd\n\n    data = pd.read_csv(test_set.path)\n    model = XGBClassifier()\n    model.load_model(xgb_model.path)\n\n    score
+          = model.score(\n        data.drop(columns=[\"target\"]),\n        data.target,\n    )\n\n    from
+          sklearn.metrics import roc_curve\n    y_scores =  model.predict_proba(data.drop(columns=[\"target\"]))[:,
+          1]\n    fpr, tpr, thresholds = roc_curve(\n         y_true=data.target.to_numpy(),
+          y_score=y_scores, pos_label=True\n    )\n    metrics.log_roc_curve(fpr.tolist(),
+          tpr.tolist(), thresholds.tolist())\n\n    from sklearn.metrics import confusion_matrix\n    y_pred
+          = model.predict(data.drop(columns=[\"target\"]))\n\n    metrics.log_confusion_matrix(\n       [\"False\",
+          \"True\"],\n       confusion_matrix(\n           data.target, y_pred\n       ).tolist(),  #
+          .tolist() to convert np array to list.\n    )\n\n    xgb_model.metadata[\"test_score\"]
+          = float(score)\n    smetrics.log_metric(\"score\", float(score))\n\n"],
+          "image": "python:3.7"}}, "inputs": [{"name": "test_set", "type": "Dataset"},
+          {"name": "xgb_model", "type": "Model"}], "name": "Eval model", "outputs":
+          [{"name": "metrics", "type": "ClassificationMetrics"}, {"name": "smetrics",
+          "type": "Metrics"}]}', pipelines.kubeflow.org/component_ref: '{}'}
+  - name: get-data
+    container:
+      args: [--executor_input, '{{$}}', --function_to_execute, get_data]
+      command:
+      - sh
+      - -c
+      - |2
+
+        if ! [ -x "$(command -v pip)" ]; then
+            python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip
+        fi
+
+        PIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'pandas' 'sklearn' 'kfp==1.8.10' && "$0" "$@"
+      - sh
+      - -ec
+      - |
+        program_path=$(mktemp -d)
+        printf "%s" "$0" > "$program_path/ephemeral_component.py"
+        python3 -m kfp.v2.components.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+      - |2+
+
+        import kfp
+        from kfp.v2 import dsl
+        from kfp.v2.dsl import *
+        from typing import *
+
+        def get_data(
+            dataset_train: Output[Dataset],
+            dataset_test: Output[Dataset]
+
+        ):
+            from sklearn import datasets
+            from sklearn.model_selection import train_test_split as tts
+            import pandas as pd
+            # import some data to play with
+
+            data_raw = datasets.load_breast_cancer()
+            data = pd.DataFrame(data_raw.data, columns=data_raw.feature_names)
+            data["target"] = data_raw.target
+
+            train, test = tts(data, test_size=0.3)
+
+            train.to_csv(dataset_train.path)
+            test.to_csv(dataset_test.path)
+
+      image: python:3.7
+      imagePullPolicy: Always
+    outputs:
+      artifacts:
+      - {name: get-data-dataset_test, path: /tmp/outputs/dataset_test/data}
+      - {name: get-data-dataset_train, path: /tmp/outputs/dataset_train/data}
+    metadata:
+      annotations: {scheduling.clops.clova.ai/machine-type: pipe-cpu-half-v1, pipelines.kubeflow.org/component_spec: '{"implementation":
+          {"container": {"args": ["--executor_input", {"executorInput": null}, "--function_to_execute",
+          "get_data"], "command": ["sh", "-c", "\nif ! [ -x \"$(command -v pip)\"
+          ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get
+          install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip
+          install --quiet     --no-warn-script-location ''pandas'' ''sklearn'' ''kfp==1.8.10''
+          && \"$0\" \"$@\"\n", "sh", "-ec", "program_path=$(mktemp -d)\nprintf \"%s\"
+          \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+          "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing
+          import *\n\ndef get_data(\n    dataset_train: Output[Dataset],\n    dataset_test:
+          Output[Dataset]\n\n):\n    from sklearn import datasets\n    from sklearn.model_selection
+          import train_test_split as tts\n    import pandas as pd\n    # import some
+          data to play with\n\n    data_raw = datasets.load_breast_cancer()\n    data
+          = pd.DataFrame(data_raw.data, columns=data_raw.feature_names)\n    data[\"target\"]
+          = data_raw.target\n\n    train, test = tts(data, test_size=0.3)\n\n    train.to_csv(dataset_train.path)\n    test.to_csv(dataset_test.path)\n\n"],
+          "image": "python:3.7"}}, "name": "Get data", "outputs": [{"name": "dataset_train",
+          "type": "Dataset"}, {"name": "dataset_test", "type": "Dataset"}]}', pipelines.kubeflow.org/component_ref: '{}'}
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.10
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  - name: pipeline-v2
+    dag:
+      tasks:
+      - name: eval-model
+        template: eval-model
+        dependencies: [get-data, train-xgb-model]
+        arguments:
+          artifacts:
+          - {name: get-data-dataset_test, from: '{{tasks.get-data.outputs.artifacts.get-data-dataset_test}}'}
+          - {name: train-xgb-model-model_artifact, from: '{{tasks.train-xgb-model.outputs.artifacts.train-xgb-model-model_artifact}}'}
+      - {name: get-data, template: get-data}
+      - name: train-xgb-model
+        template: train-xgb-model
+        dependencies: [get-data]
+        arguments:
+          artifacts:
+          - {name: get-data-dataset_train, from: '{{tasks.get-data.outputs.artifacts.get-data-dataset_train}}'}
+  - name: train-xgb-model
+    container:
+      args: [--executor_input, '{{$}}', --function_to_execute, train_xgb_model]
+      command:
+      - sh
+      - -c
+      - |2
+
+        if ! [ -x "$(command -v pip)" ]; then
+            python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip
+        fi
+
+        PIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'pandas' 'sklearn' 'xgboost' 'kfp==1.8.10' && "$0" "$@"
+      - sh
+      - -ec
+      - |
+        program_path=$(mktemp -d)
+        printf "%s" "$0" > "$program_path/ephemeral_component.py"
+        python3 -m kfp.v2.components.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+      - |2+
+
+        import kfp
+        from kfp.v2 import dsl
+        from kfp.v2.dsl import *
+        from typing import *
+
+        def train_xgb_model(
+            dataset: Input[Dataset],
+            model_artifact: Output[Model]
+        ):
+            from xgboost import XGBClassifier
+            import pandas as pd
+
+            data = pd.read_csv(dataset.path)
+
+            model = XGBClassifier(
+                objective="binary:logistic"
+            )
+            model.fit(
+                data.drop(columns=["target"]),
+                data.target,
+            )
+
+            score = model.score(
+                data.drop(columns=["target"]),
+                data.target,
+            )
+
+            model_artifact.metadata["train_score"] = float(score)
+            model_artifact.metadata["framework"] = "XGBoost"
+
+            model.save_model(model_artifact.path)
+
+      image: python:3.7
+      imagePullPolicy: Always
+    inputs:
+      artifacts:
+      - {name: get-data-dataset_train, path: /tmp/inputs/dataset/data}
+    outputs:
+      artifacts:
+      - {name: train-xgb-model-model_artifact, path: /tmp/outputs/model_artifact/data}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.10
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
+          {"args": ["--executor_input", {"executorInput": null}, "--function_to_execute",
+          "train_xgb_model"], "command": ["sh", "-c", "\nif ! [ -x \"$(command -v
+          pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user
+          || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3
+          -m pip install --quiet     --no-warn-script-location ''pandas'' ''sklearn''
+          ''xgboost'' ''kfp==1.8.10'' && \"$0\" \"$@\"\n", "sh", "-ec", "program_path=$(mktemp
+          -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3
+          -m kfp.v2.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+          "\nimport kfp\nfrom kfp.v2 import dsl\nfrom kfp.v2.dsl import *\nfrom typing
+          import *\n\ndef train_xgb_model(\n    dataset: Input[Dataset],\n    model_artifact:
+          Output[Model]\n):\n    from xgboost import XGBClassifier\n    import pandas
+          as pd\n\n    data = pd.read_csv(dataset.path)\n\n    model = XGBClassifier(\n        objective=\"binary:logistic\"\n    )\n    model.fit(\n        data.drop(columns=[\"target\"]),\n        data.target,\n    )\n\n    score
+          = model.score(\n        data.drop(columns=[\"target\"]),\n        data.target,\n    )\n\n    model_artifact.metadata[\"train_score\"]
+          = float(score)\n    model_artifact.metadata[\"framework\"] = \"XGBoost\"\n\n    model.save_model(model_artifact.path)\n\n"],
+          "image": "python:3.7"}}, "inputs": [{"name": "dataset", "type": "Dataset"}],
+          "name": "Train xgb model", "outputs": [{"name": "model_artifact", "type":
+          "Model"}]}', pipelines.kubeflow.org/component_ref: '{}'}
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner
+  ttlSecondsAfterFinished: 10
