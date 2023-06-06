@@ -3,16 +3,13 @@ import datetime
 from distutils.util import strtobool
 import logging
 import yaml
-from kubernetes.client import V1PodTemplateSpec
-from kubernetes.client import V1ObjectMeta
-from kubernetes.client import V1PodSpec
-from kubernetes.client import V1Container
 
-from kubeflow.training import V1ReplicaSpec
-from kubeflow.training import KubeflowOrgV1PyTorchJob
-from kubeflow.training import KubeflowOrgV1PyTorchJobSpec
-from kubeflow.training import V1RunPolicy
-from kubeflow.training import TrainingClient
+from kubernetes import client as k8s_client
+from kubernetes import config
+
+import launch_crd
+from kubeflow.pytorchjob import V1PyTorchJob as V1PyTorchJob_original
+from kubeflow.pytorchjob import V1PyTorchJobSpec as V1PyTorchJobSpec_original
 
 
 def yamlOrJsonStr(string):
@@ -29,6 +26,19 @@ def get_current_namespace():
     except FileNotFoundError:
         current_namespace = "kubeflow"
     return current_namespace
+
+
+# Patch PyTorchJob APIs to align with k8s usage
+class V1PyTorchJob(V1PyTorchJob_original):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.openapi_types = self.swagger_types
+
+
+class V1PyTorchJobSpec(V1PyTorchJobSpec_original):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.openapi_types = self.swagger_types
 
 
 def get_arg_parser():
@@ -80,63 +90,64 @@ def get_arg_parser():
     return parser
 
 
-
-
 def main(args):
     logging.getLogger(__name__).setLevel(logging.INFO)
     logging.info('Generating job template.')
 
-    container_name = "pytorch"
-    
+    jobSpec = V1PyTorchJobSpec(
+        pytorch_replica_specs={
+            'Master': args.masterSpec,
+            'Worker': args.workerSpec,
+        },
+        active_deadline_seconds=args.activeDeadlineSeconds,
+        backoff_limit=args.backoffLimit,
+        clean_pod_policy=args.cleanPodPolicy,
+        ttl_seconds_after_finished=args.ttlSecondsAfterFinished,
+    )
+
     api_version = f"{args.jobGroup}/{args.version}"
-    
-    logging.info('Build PytorchJob')
-    pytorchjob = KubeflowOrgV1PyTorchJob(
+
+    job = V1PyTorchJob(
         api_version=api_version,
         kind=args.kind,
-        metadata=V1ObjectMeta(name=args.name, namespace=args.namespace),
-        spec=KubeflowOrgV1PyTorchJobSpec(
-            run_policy=V1RunPolicy(clean_pod_policy="None"),
-            pytorch_replica_specs={
-                'Master': args.masterSpec,
-                'Worker': args.workerSpec,
-            },
-            active_deadline_seconds=args.activeDeadlineSeconds,
-            backoff_limit=args.backoffLimit,
-            clean_pod_policy=args.cleanPodPolicy,
-            ttl_seconds_after_finished=args.ttlSecondsAfterFinished,
+        metadata=k8s_client.V1ObjectMeta(
+            name=args.name,
+            namespace=args.namespace,
         ),
+        spec=jobSpec,
     )
-    
-    expected_conditions = ["Succeeded", "Failed"]
-    
-    logging.info('Get TrainingClient()')
-    training_client = TrainingClient()
+
+    serialized_job = k8s_client.ApiClient().sanitize_for_serialization(job)
+
+    logging.info('Creating launcher client.')
+
+    config.load_incluster_config()
+    api_client = k8s_client.ApiClient()
+    launcher_client = launch_crd.K8sCR(
+        group=args.jobGroup,
+        plural=args.jobPlural,
+        version=args.version,
+        client=api_client
+    )
+
     logging.info('Submitting CR.')
-    training_client.create_pytorchjob(pytorchjob, namespace=args.namespace)
+    create_response = launcher_client.create(serialized_job)
 
-    training_client.get_pytorchjob(args.name).metadata.name
-    logging.info(f"HBSEO PytorchJob Name = {training_client.get_pytorchjob(args.name).metadata.name}")
+    expected_conditions = ["Succeeded", "Failed"]
+    logging.info(
+        f'HBSEO Monitoring job until status is any of {expected_conditions}.'
+    )
 
+    launcher_client.get_logs(args.name, args.namespace)
 
-    training_client.get_job_conditions(name=args.name, namespace=args.namespace, job_kind=args.kind)
-    logging.info(f"HBSEO Job Condition = {training_client.get_job_conditions(name=args.name, namespace=args.namespace, job_kind=args.kind)}")
-    pytorchjob = training_client.wait_for_job_conditions(name=args.name, namespace=arg.snamespace, job_kind=args.kind)
-    
-    print(f"Succeeded number of replicas: {pytorchjob.status.replica_statuses['Master'].succeeded}")
-    
-    #training_client.is_job_succeeded(name=args.name, namespace=args.namespace, job_kind=args.kind)
-    #training_client.get_job_logs(name=args.name, namespace=args.namespace, container=container_name)
-    #training_client.delete_pytorchjob(name=args.name, namespace=args.namespace)
-
-
+#    launcher_client.wait_for_condition(
+#        args.namespace, args.name, expected_conditions,
+#        timeout=datetime.timedelta(minutes=args.jobTimeoutMinutes))
+#    if args.deleteAfterDone:
+#        logging.info('Deleting job.')
+#        launcher_client.delete(args.name, args.namespace)
 
 if __name__ == "__main__":
     parser = get_arg_parser()
     args = parser.parse_args()
     main(args)
-
-
-
-
-
